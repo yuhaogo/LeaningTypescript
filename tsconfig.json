@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "outDir": "./server/public/",
+        "sourceMap": true,
+        "noImplicitAny": true,
+        "module": "commonjs",
+        "target": "es2016",
+        "jsx": "react",
+        "experimentalDecorators": true
+    },
+    "include": [
+        "./app/index.tsx"
+    ]
+}
