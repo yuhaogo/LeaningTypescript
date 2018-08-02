@@ -1,0 +1,2 @@
+# LeaningTypescript
+good for you
