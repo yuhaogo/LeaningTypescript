@@ -1,8 +1,8 @@
-var express=require('express');
-var app=express();
-var mysql=require('../../base/mysql');
+const express=require('express');
+const app=express();
 
 app.post('/',function(req,res){
+    const mysqls=require('../../base/mysql');
     var rsp={
         success:true,
         data:[],
@@ -10,7 +10,7 @@ app.post('/',function(req,res){
     }
     var params=req.body;
     var sql='SELECT * FROM user where user_name="'+params.user+'" and pass_word="'+params.pwd+'"';
-    mysql.query(sql,function(err, rows,message){
+    mysqls.query(sql,function(err, rows,message){
         if(err){
             if(rows.length>0){
                 rsp.data=rows[0];

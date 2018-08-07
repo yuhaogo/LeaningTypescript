@@ -15,6 +15,7 @@ client.connect(function(err){
     if(err){
         console.log(err);
     }
+    console.log("mysql connect success");
 });
 function querySql(sql,callback){
     client.query("use " + TEST_DATABASE);
