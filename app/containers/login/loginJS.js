@@ -1,30 +1,24 @@
-require('./Login.less');
+require('./login.less');
 import * as React from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 // import * as PropTypes from 'prop-types';
 import {Button,Input,Icon,Alert} from 'antd';
 import actions from './action';
-import {withRouter} from 'react-router-dom'
-//state 定义
-interface LoginInfo {
-    userName:string,
-    password:string,
-    pwdType:string,
-    iconLoading:boolean,
-    success:boolean,
-    message:string,
-    init:number
-}
-//ts connect 修饰器用法
-@(connect((state:any)=>{
-    return{
-        UserInfo:state.login
-    }
-},dispatch=>bindActionCreators(actions,dispatch)) as any)
-class Login extends React.Component<any,LoginInfo> {
+import {withRouter} from 'react-router-dom';
 
-    constructor(props:any){
+// @withRouter
+// @connect(
+//     state=>(
+//         {
+//             UserInfo:state.login
+//         }
+//     ),
+//     dispatch=>bindActionCreators(actions,dispatch)
+// )
+class Login extends React.Component{
+
+    constructor(props){
         super(props);
         this.state={
             userName:"",
@@ -36,9 +30,10 @@ class Login extends React.Component<any,LoginInfo> {
             init:0
         }
     }
+
     //文本框输入
-    handleChange=(e:React.ChangeEvent<HTMLInputElement>):void=>{
-        const _strObj:any=e.target;
+    handleChange=(e)=>{
+        const _strObj=e.target;
         if(_strObj.id==='userName'){
             this.setState({
                 userName:_strObj.value
@@ -50,7 +45,7 @@ class Login extends React.Component<any,LoginInfo> {
         }
     }
     //登录
-    handleClick=(e:React.MouseEvent<HTMLButtonElement>|KeyboardEvent):void=>{
+    handleClick=(e)=>{
         e.stopPropagation();
         this.setState({
             iconLoading:true
@@ -69,7 +64,7 @@ class Login extends React.Component<any,LoginInfo> {
             })
             return;
         }
-        login(body).then((data:any)=>{
+        login(body).then((data)=>{
             let {success,message}=data;
             this.setState({
                 success:success,
@@ -94,14 +89,14 @@ class Login extends React.Component<any,LoginInfo> {
         })
     }
     //回车登录
-    handleKeyDown=(e:KeyboardEvent)=>{
+    handleKeyDown=(e)=>{
         e.stopPropagation();
         if(e.keyCode==13){
             debugger;
             this.handleClick(e);
         }
     }
-    render():JSX.Element {
+    render() {
         return (
         <div className="login-body">
             <div className="login-main-bg"  ></div>
@@ -142,4 +137,4 @@ class Login extends React.Component<any,LoginInfo> {
     }
 }
 
-export default withRouter(Login);
+export default Login;

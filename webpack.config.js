@@ -30,7 +30,7 @@ let config=Object.assign({},{
                   ]
                 }),
                 compilerOptions: {
-                  module: 'es2015'
+                  module: 'es6'
                 }
               }
         },
