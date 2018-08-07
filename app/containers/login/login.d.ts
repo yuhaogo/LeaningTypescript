@@ -1,2 +1,2 @@
-declare const Login:any;
-export default Login;
+// declare const Login:any;
+// export default Login;

@@ -1,19 +1,33 @@
-var HtmlWebpackPlugin=require('html-webpack-plugin');
-var webpack=require('webpack');
-module.exports={
+const HtmlWebpackPlugin=require('html-webpack-plugin');
+const Webpack=require('webpack');
+const webpackConfig=require('./webpack.config');
+module.exports=Object.assign(webpackConfig,{
     mode:'development',
-    entry: {
-      app:[
-        'webpack-hot-middleware/client?reload=true',
-        'react-hot-loader/patch',
-        './app/index.tsx'
-      ]
+    entry:{app:'./app/index.tsx'},
+    
+    output: {
+      filename: 'app.bundle.js'
     },
     plugins: [
-        new webpack.HotModuleReplacementPlugin(),
+        new Webpack.HotModuleReplacementPlugin(),
         new HtmlWebpackPlugin({
-          template:'./app/index.html',
-          inject: false
+          template:'./app/index.html'
         }),
-      ]
-}
+      ],
+    devServer: {
+        publicPath:'/',
+        contentBase:'./public',
+        hot:true,
+        port:8001,
+        open:true,
+        inline:true,
+        noInfo: true ,
+        quiet: true ,
+        compress: true ,
+        clientLogLevel:'none',
+        overlay: {
+          warnings: true ,
+          errors: true
+      } ,
+    }
+})

@@ -1,12 +1,12 @@
 const devConfig=require('./webpack.development');
 const proConfig=require('./webpack.production');
-const path=require('path');
+const Path=require('path');
 const tsImportPluginFactory=require('ts-import-plugin');
-const _config=process.env.NODE_ENV==='development'?devConfig:proConfig;
-let config=Object.assign({},{
+// const _config=process.env.NODE_ENV==='development'?devConfig:proConfig;
+let Config={
     output: {
       filename: 'app.bundle.js',
-      path: path.join(__dirname,'./server/public'),
+      path: Path.join(__dirname,'./public'),
     },
     resolve: {
       extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js']
@@ -64,6 +64,6 @@ let config=Object.assign({},{
         }
       ]
     }
-},_config);
+};
 
-module.exports=config;
+module.exports=Config;
