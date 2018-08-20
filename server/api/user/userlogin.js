@@ -1,6 +1,5 @@
 const express=require('express');
 const app=express();
-
 app.post('/',function(req,res){
     const mysqls=require('../../base/mysql');
     var rsp={

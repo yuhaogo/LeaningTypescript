@@ -7,7 +7,7 @@ interface result {
     status:number,
     json:()=>void
 }
-var api_host="http://127.0.0.1:8002"
+// var api_host="http://127.0.0.1:8002";
 function checkOut504(res:result) {
     if(res.status===504){
         Modal.error({
@@ -32,12 +32,13 @@ function dataJson(res:result) {
     return res.json();
 }
 export const cFetch=(apiUrl:any,param:any)=>{
-    const baseUrl=api_host+apiUrl;
+    const baseUrl=apiUrl;
     param.headers={
         'Accept': 'application/json',
         'Content-Type': 'application/json'
     }
-    param.credentials= 'include';
+    // param.credentials= 'include';
+    console.log(param);
     //param.mode='no-cors';
     return fetch(baseUrl,param)
     .then(checkOut504)

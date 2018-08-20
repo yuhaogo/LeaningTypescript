@@ -3,15 +3,18 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var app = express();
-var userlogin=require('./api/user/userlogin');
-
+var cors=require('cors');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// app.use(cors());
+// app.options("*",cors());
+
 //接口
+var userlogin=require('./api/user/userlogin');
 app.use('/api/user/userlogin',userlogin);
 // error handler
 app.use(function(err, req, res, next) {
