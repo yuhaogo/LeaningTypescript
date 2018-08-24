@@ -52,7 +52,7 @@ class Login extends React.Component<any,LoginInfo> {
         }
     }
     //登录
-    handleClick=(e:React.MouseEvent<HTMLButtonElement>|KeyboardEvent):void=>{
+    handleClick=(e:React.MouseEvent<HTMLButtonElement>|React.KeyboardEvent):void=>{
         e.stopPropagation();
         this.setState({
             iconLoading:true
@@ -96,16 +96,15 @@ class Login extends React.Component<any,LoginInfo> {
         })
     }
     //回车登录
-    handleKeyDown=(e:KeyboardEvent)=>{
+    handleKeyDown=(e:React.KeyboardEvent)=>{
         e.stopPropagation();
         if(e.keyCode==13){
-            debugger;
             this.handleClick(e);
         }
     }
     render():JSX.Element {
         return (
-        <div className="login-body">
+        <div className="login-body" onKeyDown={this.handleKeyDown}>
             <div className="login-main-bg"  ></div>
             <div className="login-main">
                 <ul>

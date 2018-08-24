@@ -1,37 +1,45 @@
 import './main.less';
 import * as React from 'react';
-import {Layout} from 'antd';
-const {Header,Content}=Layout
+import DiamondBox from '../../component/diamond/diamond';
+import Scroll from '../../component/scroll/scroll';
+import {Layout, Icon} from 'antd';
+const {Sider,Content,Header}=Layout
 
-class Index extends React.Component<any,any>{
+interface stateType {
+    layoutType:number
+}
+
+class Index extends React.Component<any,stateType>{
     constructor(props:any){
         super(props);
+        this.state={
+            layoutType:0
+        }
     }
-
     render():JSX.Element{
         return(
-            // <div className="main">
-            //     <div className="menu-main"></div>
-            //     <div className="content-main">
-            //         <div className="content-body">
-            //             <div className="content">
-                            
-            //             </div>
-            //             <div className="move-btn">
-            //                 <div className="move-left"></div>
-            //                 <div className="move-right"></div>
-            //             </div>
-            //         </div>
-            //     </div>
-            // </div>
-            <Layout className="main">
-                <Header className="menu-main">
-                    <div className="user-info">
-                        
-                    </div>
-                </Header>
-                <Content></Content>
-            </Layout>
+            <div className="main">
+                <Layout>
+                    <Sider className="main-shade" width="100px"></Sider>
+                    <Content className="main-content">
+                        <Scroll>
+                            <DiamondBox title="个人" />
+                            <DiamondBox title="工作" />
+                            <DiamondBox title="照片" />
+                            <DiamondBox title="游戏" />
+                        </Scroll>
+                    </Content>
+                    <Sider className="main-actions" width="100px">
+                        <div className="action-btn" >
+                            <Icon type="user"/>
+                        </div>
+                        <div className="action-holder"></div>
+                        <div className="action-btn" >
+                            <Icon type="logout"/>
+                        </div>
+                    </Sider>
+                </Layout>
+            </div>
         )
     }
 }

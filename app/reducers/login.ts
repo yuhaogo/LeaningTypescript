@@ -9,7 +9,6 @@ const initState:UserInfo={
 export default (state:UserInfo=initState,actions:any):UserInfo=>{
     switch(actions.type){
         case 'LOGIN_SUCCESS':
-            debugger;
             const {Username,zhName}=actions.payload;
             var newState={
                 UserName:Username,

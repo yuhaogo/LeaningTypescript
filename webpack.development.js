@@ -33,7 +33,11 @@ module.exports=Object.assign(webpackConfig,{
           '/api/*':{
             target:'http://127.0.0.1:8002',
             changeOrigin:true
+          },
+          '/index/*':{
+            target:'http://127.0.0.1:8001',
+            pathRewrite: {'/index/*' : ''}
           }
-        }
+      }
     }
 })

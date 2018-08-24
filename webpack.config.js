@@ -40,23 +40,8 @@ let Config={
           exclude: /node_modules/
         },
         {
-          test:/\.css$/,
-          use:[{
-            loader:'style-loader'
-          },{
-            loader:'css-loader'
-          }]
-        },
-        {
-          test:/\.less$/,
-          exclude: /node_modules/,
-          use:[{
-            loader:'style-loader'
-          },{
-            loader:'css-loader'
-          },{
-            loader:'less-loader'
-          }]
+          test:/\.(css|less)$/,
+          use:['style-loader','css-loader','less-loader']
         },
         {
           test:/\.(png|jpg|gif|jpeg|woff|woff2)$/,
