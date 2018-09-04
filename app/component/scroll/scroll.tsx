@@ -15,7 +15,8 @@ class Scroll extends Component<any,any>{
             sliderHeight:0,
             sliderTop:0,
             step:0,
-            isTouch:false
+            isTouch:false,
+            top:'100%'
         }
     }
     componentDidMount(){
@@ -23,7 +24,8 @@ class Scroll extends Component<any,any>{
             const step=this.scrollBox.clientHeight/this.scrollContent.clientHeight;
             this.setState({
                 sliderHeight:step>1?0:Math.floor(step*100),
-                step:step
+                step:step,
+                top:0
             })
         },0)
     }
@@ -59,12 +61,12 @@ class Scroll extends Component<any,any>{
     }
     render():JSX.Element{
         const {children}=this.props;
-        const {sliderHeight,sliderTop}=this.state;
+        const {sliderHeight,sliderTop,top}=this.state;
         const shadeClassName=this.state.isTouch?'move':'';
         return(
             <div className="scroll-box" ref={ref=>this.scrollBox=ref} onScroll={this.handleScroll}>
                 <div className="scroll-main" ref={ref=>this.scrollMain=ref}>
-                    <div className="scroll-content" ref={ref=>this.scrollContent=ref}>
+                    <div className="scroll-content" ref={ref=>this.scrollContent=ref} style={{top:top}}>
                         {children}
                     </div>
                     <div className="scroll-bar" onMouseDown={this.handleMouseDown}>

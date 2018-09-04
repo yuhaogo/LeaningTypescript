@@ -4,14 +4,25 @@ import * as React from 'react';
 
 export class Diamond extends React.Component<any,any>{
     constructor(props:any){
-        super(props);
+        super(props);  
+        this.state={
+            marginBtm:5
+        }
     }
-
+    componentDidMount(){
+        console.log(this.state.marginTop);
+        setTimeout(()=>{
+            this.setState({
+                marginBtm:10
+            })
+        },1000);
+    }
     render():JSX.Element{
         const {color,type:classType}=this.props;
+        const {marginBtm}=this.state;
         const _className=classType=='big'?'big':'small';
         return(
-            <div className={`diamond-main ${_className}`} style={{backgroundColor:color}}></div>
+            <div className={`diamond-main ${_className}`} style={{backgroundColor:color,marginBottom:marginBtm}}></div>
         )
     }
 }
@@ -20,7 +31,9 @@ class DiamondBox extends React.PureComponent<any,any>{
     private Colors:Array<string>=['#d0b122','#e0521d','#8632b3','#7ae3bf'];
     constructor(props:any){
         super(props);
+      
     }
+  
     //测试
     getRandomDiamond=()=>{
         let _num:number=6+Math.floor(Math.random()*10);

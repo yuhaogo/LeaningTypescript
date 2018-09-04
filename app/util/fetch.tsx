@@ -5,6 +5,7 @@ import { promises } from 'fs';
 
 interface result {
     status:number,
+    ok:boolean,
     json:()=>void
 }
 // var api_host="http://127.0.0.1:8002";
@@ -29,7 +30,11 @@ function checkOut401(res:result) {
     return res;
 }
 function dataJson(res:result) {
-    return res.json();
+    if(res.ok){
+        return res.json();
+    }else{
+        return res;
+    }
 }
 export const cFetch=(apiUrl:any,param:any)=>{
     const baseUrl=apiUrl;
