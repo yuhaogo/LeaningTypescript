@@ -7,15 +7,15 @@ import {Button,Input,Icon,Alert} from 'antd';
 import actions from './action';
 import {withRouter} from 'react-router-dom';
 
-// @withRouter
-// @connect(
-//     state=>(
-//         {
-//             UserInfo:state.login
-//         }
-//     ),
-//     dispatch=>bindActionCreators(actions,dispatch)
-// )
+@withRouter
+@connect(
+    state=>(
+        {
+            UserInfo:state.login
+        }
+    ),
+    dispatch=>bindActionCreators(actions,dispatch)
+)
 class Login extends React.Component{
 
     constructor(props){

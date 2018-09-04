@@ -36,7 +36,6 @@ class DiamondBox extends React.PureComponent<any,any>{
     }
     render():JSX.Element{
         const {title}=this.props;
-        console.log("DiamondBox",'');
         const diamondList=this.getRandomDiamond();
         return(
             <div className="diamond-box-main">
