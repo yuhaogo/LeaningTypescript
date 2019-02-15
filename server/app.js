@@ -16,6 +16,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 //接口
 var userlogin=require('./api/user/userlogin');
 app.use('/api/user/userlogin',userlogin);
+//方块
+var diamond=require('./api/diamond');
+app.use('/api/diamond',diamond);
 // error handler
 app.use(function(err, req, res, next) {
     // set locals, only providing error in development

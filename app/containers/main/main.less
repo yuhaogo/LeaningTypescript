@@ -37,5 +37,24 @@
     }
     .main-content{
         padding: 10px 0;
+        overflow: hidden;
+        .content-body{
+            width: 200%;
+            height: 100%;
+            left: -100%;
+            display: flex;
+            position: relative;
+            transition: left 0.3s;
+            &.detail{
+                left: 0;
+            }
+            .fl{
+                height: 100%;
+                flex: 1;
+            }
+            .diamond-detail{
+                width: 100%;
+            }
+        }
     }
 }

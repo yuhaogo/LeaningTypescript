@@ -21,12 +21,7 @@ class Scroll extends Component<any,any>{
     }
     componentDidMount(){
         setTimeout(()=>{
-            const step=this.scrollBox.clientHeight/this.scrollContent.clientHeight;
-            this.setState({
-                sliderHeight:step>1?0:Math.floor(step*100),
-                step:step,
-                top:0
-            })
+            this.resize();
         },0)
     }
     handleScroll=(e:any)=>{
@@ -39,7 +34,6 @@ class Scroll extends Component<any,any>{
     }
     handleMouseDown=(e:any)=>{
        this.mouseY=e.pageY;
-       console.log(this.mouseY);
        this.setState({
            isTouch:true
        })
@@ -49,14 +43,21 @@ class Scroll extends Component<any,any>{
             const moveY=this.mouseY-e.pageY;
             const scrollTop=this.state.sliderTop-moveY;
             this.mouseY=e.pageY;
-            console.log(scrollTop);
-            debugger;
             this.scrollMain.scrollTop=scrollTop*(1/this.state.step);
         }
     }
     handleMouseUp=()=>{
         this.setState({
             isTouch:false
+        })
+    }
+    //重置滑块大小
+    resize=()=>{
+        const step=this.scrollBox.clientHeight/this.scrollContent.clientHeight;
+        this.setState({
+            sliderHeight:step>1?0:Math.floor(step*100),
+            step:step,
+            top:0
         })
     }
     render():JSX.Element{

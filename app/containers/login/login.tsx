@@ -72,7 +72,6 @@ class Login extends React.Component<any,LoginInfo> {
             return;
         }
         login(body).then((data:any)=>{
-            debugger;
             let {success,message}=data;
             this.setState({
                 success:success,
