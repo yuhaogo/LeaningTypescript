@@ -3,23 +3,30 @@ import * as React from 'react';
 import DiamondBox from '../../component/diamond/diamond';
 import Scroll from '../../component/scroll/scroll';
 import actions from './action';
-import {Layout, Icon} from 'antd';
+import {Layout, Icon,Modal,Input,Alert} from 'antd';
 const {Sider,Content,Header}=Layout
-const {getDiamondBoxs}=actions;
+const {getDiamondBoxs,diamondVerify}=actions;
 interface stateType {
-    layoutType:number,
-    customDias:[],
-    detail:boolean
+    customDias:[],          //自定义方块合集
+    detail:boolean,         //详细页
+    modal1Visible:boolean,  //模态框显示隐藏
+    diamondPassword:string, //方块密码
+    diamondVerify:boolean,  //方块验证通过
+    diamondMessage:string   //方块验证信息
 }
 
 class Index extends React.Component<any,stateType>{
     private scrollObj:any;
+    private diamondData:any;
     constructor(props:any){
         super(props);
         this.state={
-            layoutType:0,
             customDias:[],
-            detail:false
+            detail:false,
+            modal1Visible:false,
+            diamondPassword:'',
+            diamondVerify:true,
+            diamondMessage:''
         }
     }
     componentDidMount(){
@@ -31,8 +38,7 @@ class Index extends React.Component<any,stateType>{
             const{data}=res;
             this.setState({
                 customDias:data
-            }) 
-            
+            });
         });
     }
     //获取大模块
@@ -48,10 +54,61 @@ class Index extends React.Component<any,stateType>{
         return dias;
     }
     //切换详细模块
-    onDetail=()=>{
-        debugger;
+    onDetail=(e:React.MouseEvent<HTMLDivElement>,item:any)=>{
+        e.stopPropagation();
+        this.diamondData=item;
+        if(item.lock==1){
+            this.setState({
+                modal1Visible:true
+            });
+        }else{
+            this.setState({
+                detail:true
+            });
+        }
+    }
+    //密码验证
+    setModal1Visible=(action:string)=>{
+        switch(action){
+            case 'ok':
+                const {id}=this.diamondData;
+                const {diamondPassword}=this.state;
+                diamondVerify({
+                    id:id,
+                    password:diamondPassword
+                }).then(data=>{
+                    const {success,message}=data;
+                    if(success){
+                        this.setState({
+                            modal1Visible:false,
+                            detail:true
+                        })
+                    }else{
+                        this.setState({
+                            diamondVerify:false,
+                            diamondMessage:message
+                        })
+                    }
+                })
+                break;
+            default:
+                this.setState({
+                    modal1Visible:false
+                })
+                break;
+        }
+    }
+    //方块密码验证输入框
+    changeDiamondPassword=(e:any)=>{
+        const {diamondVerify}=this.state;
+        const {value}=e.target;
+        if(!diamondVerify){
+            this.setState({
+                diamondVerify:!diamondVerify
+            })
+        }
         this.setState({
-            detail:true
+            diamondPassword:value
         })
     }
     render():JSX.Element{
@@ -83,6 +140,16 @@ class Index extends React.Component<any,stateType>{
                         </div>
                     </Sider>
                 </Layout>
+                <Modal
+                title="验证"
+                style={{ top: 20 }}
+                visible={this.state.modal1Visible}
+                onOk={() => this.setModal1Visible('ok')}
+                onCancel={() => this.setModal1Visible('cancel')}
+                >
+                    {this.state.diamondVerify?'':<Alert message={this.state.diamondMessage} style={{marginBottom:10}} type="error" showIcon />}
+                    <Input placeholder="password" type="password" value={this.state.diamondPassword} onChange={this.changeDiamondPassword} />
+                </Modal>
             </div>
         )
     }

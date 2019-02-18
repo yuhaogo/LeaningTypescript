@@ -5,6 +5,13 @@ const getDiamondBoxs=()=>{
         return data;
     })
 }
+//方块验证
+const diamondVerify=(param:any)=>{
+    return cFetch('/api/diamond/verify',{method:'POST',body:JSON.stringify(param)}).then((data:any)=>{
+        return data;
+    })
+}
 export default {
-    getDiamondBoxs:getDiamondBoxs
+    getDiamondBoxs:getDiamondBoxs,
+    diamondVerify:diamondVerify
 }
