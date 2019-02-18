@@ -42,30 +42,4 @@ app.get('/boxs',function(req,res){
         })
     })
 })
-app.post('/verify',function(req,res){
-    const mysqls=require('../../base/mysql');
-    var rsp={
-        success:true,
-        data:[],
-        message:'验证成功'
-    }
-    var params=req.body;
-    var sql='SELECT * FROM diamonditem where id="'+params.id+'" and password="'+params.password+'"';
-    mysqls.query(sql,function(suc, rows,message){
-        let data=null;
-        if(suc){
-            if(rows.length>0){
-                rsp.data=data;
-            }else{
-                rsp.success=false;
-                rsp.message='验证失败';
-            }
-            res.json(rsp);
-            return;
-        }
-        rsp.success=false;
-        rsp.message=message;
-        res.json(rsp);
-    })
-})
 module.exports=app;

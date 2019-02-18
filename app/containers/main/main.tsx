@@ -1,9 +1,14 @@
 import './main.less';
+import 'braft-editor/dist/index.css';
 import * as React from 'react';
+import actions from './action';
+import BraftEditor from 'braft-editor'
+import {Layout, Icon,Modal,Input,Alert} from 'antd';
+
+
 import DiamondBox from '../../component/diamond/diamond';
 import Scroll from '../../component/scroll/scroll';
-import actions from './action';
-import {Layout, Icon,Modal,Input,Alert} from 'antd';
+import Detail from './component/detail';
 const {Sider,Content,Header}=Layout
 const {getDiamondBoxs,diamondVerify}=actions;
 interface stateType {
@@ -111,26 +116,35 @@ class Index extends React.Component<any,stateType>{
             diamondPassword:value
         })
     }
+    //返回方块页
+    onBack=()=>{
+        this.setState({
+            detail:false
+        });
+    }
     render():JSX.Element{
         const {detail}=this.state;
         const customDias=this.customDiamonds();
         return(
             <div className="main">
                 <Layout>
-                    <Sider className="main-shade" width="100px"></Sider>
+                    {/* <Sider className="main-shade" width="100px"></Sider> */}
                     <Content className="main-content">
-                        <div className={"content-body" + (detail?' detail':'')}>
-                            <div className="fl diamond-detail">
-                                <h3>详细页</h3>
+                        <div className={'content-body' + (detail?' detail':'')}>
+                            <div className="fl">
+                                {detail?<Detail onBackClick={this.onBack} {...this.diamondData} />:null}
                             </div>
                             <div className="fl">
-                                <Scroll ref={(ref:any)=>this.scrollObj=ref}>
-                                    {customDias}
-                                </Scroll>
+                                <div className="diamond-content">
+                                    <Scroll ref={(ref:any)=>this.scrollObj=ref}>
+                                        {customDias}
+                                    </Scroll>
+                                </div>
                             </div>
                         </div>
                     </Content>
-                    <Sider className="main-actions" width="100px">
+                    {detail?null:
+                    <Sider className={'main-actions'+(detail?' detail':'')} width={detail?'50px':'100px'}>
                         <div className="action-btn" >
                             <Icon type="user"/>
                         </div>
@@ -139,6 +153,7 @@ class Index extends React.Component<any,stateType>{
                             <Icon type="logout"/>
                         </div>
                     </Sider>
+                    }
                 </Layout>
                 <Modal
                 title="验证"
