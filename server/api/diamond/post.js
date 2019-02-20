@@ -72,4 +72,24 @@ app.post('/savecontents',function(req,res){
         res.json(rsp);
     })
 })
+//保存方块内容
+app.post('/savediamondname',function(req,res){
+    const mysqls=require('../../base/mysql');
+    var rsp={
+        success:true,
+        data:[],
+        message:'保存成功'
+    }
+    var params=req.body;
+    var sql='update diamonditem set name="'+ params.name+'" where id="'+params.id+'"';
+    mysqls.query(sql,function(suc, rows,message){
+        if(suc){
+            res.json(rsp);
+            return;
+        }
+        rsp.success=false;
+        rsp.message=message;
+        res.json(rsp);
+    })
+})
 module.exports=app;

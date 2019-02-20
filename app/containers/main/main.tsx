@@ -121,6 +121,7 @@ class Index extends React.Component<any,stateType>{
         this.setState({
             detail:false
         });
+        this.getDiamondBox();
     }
     render():JSX.Element{
         const {detail}=this.state;

@@ -12,10 +12,6 @@
         display: flex;
         box-shadow: rgba(0, 0, 0, 0.5)0 0 2px;
         z-index: 9;
-        p{
-            flex: 1;
-            text-align: center;
-        }
         .anticon{
             width: 40px;
             line-height: 50px;
@@ -28,6 +24,15 @@
             &.active{
                 background-color: #001529;
                 color: #fff;
+            }
+        }
+        .diamond-title{
+            flex: 1;
+            text-align: center;
+            .ant-input{
+                text-align: center;
+                top: -4px;
+                width: auto;
             }
         }
     }
