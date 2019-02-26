@@ -2,14 +2,13 @@ import './main.less';
 import 'braft-editor/dist/index.css';
 import * as React from 'react';
 import actions from './action';
-import BraftEditor from 'braft-editor'
 import {Layout, Icon,Modal,Input,Alert} from 'antd';
 
 
 import DiamondBox from '../../component/diamond/diamond';
 import Scroll from '../../component/scroll/scroll';
 import Detail from './component/detail';
-const {Sider,Content,Header}=Layout
+const {Sider,Content}=Layout;
 const {getDiamondBoxs,diamondVerify}=actions;
 interface stateType {
     customDias:[],          //自定义方块合集
@@ -17,7 +16,8 @@ interface stateType {
     modal1Visible:boolean,  //模态框显示隐藏
     diamondPassword:string, //方块密码
     diamondVerify:boolean,  //方块验证通过
-    diamondMessage:string   //方块验证信息
+    diamondMessage:string,  //方块验证信息
+    editStatus:boolean      //编辑状态
 }
 
 class Index extends React.Component<any,stateType>{
@@ -31,8 +31,9 @@ class Index extends React.Component<any,stateType>{
             modal1Visible:false,
             diamondPassword:'',
             diamondVerify:true,
-            diamondMessage:''
-        }
+            diamondMessage:'',
+            editStatus:false
+        };
     }
     componentDidMount(){
         this.getDiamondBox();
@@ -48,10 +49,10 @@ class Index extends React.Component<any,stateType>{
     }
     //获取大模块
     customDiamonds=()=>{
-        const {customDias}=this.state;
+        const {customDias,editStatus}=this.state;
         let dias=[];
         dias=customDias.map((item:any)=>{
-            return <DiamondBox title={item.name} key={item.id} childs={item.childs} onDiamondClick={this.onDetail} />
+            return <DiamondBox title={item.name} key={item.id} childs={item.childs} onDiamondClick={this.onDetail} status={editStatus?1:0}/>;
         });
         setTimeout(()=>{
             this.scrollObj.resize();
@@ -75,32 +76,32 @@ class Index extends React.Component<any,stateType>{
     //密码验证
     setModal1Visible=(action:string)=>{
         switch(action){
-            case 'ok':
-                const {id}=this.diamondData;
-                const {diamondPassword}=this.state;
-                diamondVerify({
-                    id:id,
-                    password:diamondPassword
-                }).then(data=>{
-                    const {success,message}=data;
-                    if(success){
-                        this.setState({
-                            modal1Visible:false,
-                            detail:true
-                        })
-                    }else{
-                        this.setState({
-                            diamondVerify:false,
-                            diamondMessage:message
-                        })
-                    }
-                })
-                break;
-            default:
-                this.setState({
-                    modal1Visible:false
-                })
-                break;
+        case 'ok':
+            const {id}=this.diamondData;
+            const {diamondPassword}=this.state;
+            diamondVerify({
+                id:id,
+                password:diamondPassword
+            }).then(data=>{
+                const {success,message}=data;
+                if(success){
+                    this.setState({
+                        modal1Visible:false,
+                        detail:true
+                    });
+                }else{
+                    this.setState({
+                        diamondVerify:false,
+                        diamondMessage:message
+                    });
+                }
+            });
+            break;
+        default:
+            this.setState({
+                modal1Visible:false
+            });
+            break;
         }
     }
     //方块密码验证输入框
@@ -110,11 +111,11 @@ class Index extends React.Component<any,stateType>{
         if(!diamondVerify){
             this.setState({
                 diamondVerify:!diamondVerify
-            })
+            });
         }
         this.setState({
             diamondPassword:value
-        })
+        });
     }
     //返回方块页
     onBack=()=>{
@@ -123,13 +124,20 @@ class Index extends React.Component<any,stateType>{
         });
         this.getDiamondBox();
     }
+    //切换编辑状态
+    onTransitionEditStatus=(e:any)=>{
+        e.stopPropagation();
+        const {editStatus}=this.state;
+        this.setState({
+            editStatus:!editStatus
+        });
+    }
     render():JSX.Element{
-        const {detail}=this.state;
+        const {detail,editStatus}=this.state;
         const customDias=this.customDiamonds();
         return(
             <div className="main">
                 <Layout>
-                    {/* <Sider className="main-shade" width="100px"></Sider> */}
                     <Content className="main-content">
                         <div className={'content-body' + (detail?' detail':'')}>
                             <div className="fl">
@@ -145,29 +153,35 @@ class Index extends React.Component<any,stateType>{
                         </div>
                     </Content>
                     {detail?null:
-                    <Sider className={'main-actions'+(detail?' detail':'')} width={detail?'50px':'100px'}>
-                        <div className="action-btn" >
-                            <Icon type="user"/>
-                        </div>
-                        <div className="action-holder"></div>
-                        <div className="action-btn" >
-                            <Icon type="logout"/>
-                        </div>
-                    </Sider>
+                        <Sider className="main-actions" width={100}>
+                            <div className="action-btn" >
+                                <Icon type="user"/>
+                            </div>
+                            <div className="action-holder"></div>
+                            <div className="action-btn" >
+                                <Icon type="plus-circle" />
+                            </div>
+                            <div className={'action-btn'+(editStatus?' active':'')} onClick={this.onTransitionEditStatus} >
+                                <Icon type="form"/>
+                            </div>
+                            <div className="action-btn" >
+                                <Icon type="logout"/>
+                            </div>
+                        </Sider>
                     }
                 </Layout>
                 <Modal
-                title="验证"
-                style={{ top: 20 }}
-                visible={this.state.modal1Visible}
-                onOk={() => this.setModal1Visible('ok')}
-                onCancel={() => this.setModal1Visible('cancel')}
+                    title="验证"
+                    style={{ top: 20 }}
+                    visible={this.state.modal1Visible}
+                    onOk={() => this.setModal1Visible('ok')}
+                    onCancel={() => this.setModal1Visible('cancel')}
                 >
                     {this.state.diamondVerify?'':<Alert message={this.state.diamondMessage} style={{marginBottom:10}} type="error" showIcon />}
                     <Input placeholder="password" type="password" value={this.state.diamondPassword} onChange={this.changeDiamondPassword} />
                 </Modal>
             </div>
-        )
+        );
     }
 }
 export default Index;

@@ -6,14 +6,14 @@ module.exports=Object.assign(webpackConfig,{
     entry:{app:'./app/index.tsx'},
     
     output: {
-      filename: 'app.bundle.js'
+        filename: 'app.bundle.js'
     },
     plugins: [
         new Webpack.HotModuleReplacementPlugin(),
         new HtmlWebpackPlugin({
-          template:'./app/index.html'
+            template:'./app/index.html'
         }),
-      ],
+    ],
     devServer: {
         publicPath:'/',
         contentBase:'./public',
@@ -26,18 +26,18 @@ module.exports=Object.assign(webpackConfig,{
         compress: true ,
         clientLogLevel:'none',
         overlay: {
-          warnings: true ,
-          errors: true
+            warnings: true ,
+            errors: true
         } ,
         proxy:{
-          '/api/*':{
-            target:'http://127.0.0.1:8002',
-            changeOrigin:true
-          },
-          '/index/*':{
-            target:'http://127.0.0.1:8001',
-            pathRewrite: {'/index/*' : ''}
-          }
-      }
+            '/api/*':{
+                target:'http://127.0.0.1:8002',
+                changeOrigin:true
+            },
+            '/index/*':{
+                target:'http://127.0.0.1:8001',
+                pathRewrite: {'/index/*' : ''}
+            }
+        }
     }
-})
+});

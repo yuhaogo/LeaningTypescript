@@ -15,7 +15,7 @@ function checkOut504(res:result) {
             title: '服务器未响应',
             content: '服务器超时，请联系管理员！'
         });
-        return res
+        return res;
     }
     return res;
 }
@@ -25,7 +25,7 @@ function checkOut401(res:result) {
             title: '登陆验证过期',
             content: '您的登陆验证已过期，请重新登陆'
         });
-        return res
+        return res;
     }
     return res;
 }
@@ -41,12 +41,12 @@ export const cFetch=(apiUrl:any,param:any)=>{
     param.headers={
         'Accept': 'application/json',
         'Content-Type': 'application/json'
-    }
+    };
     // param.credentials= 'include';
     console.log(param);
     //param.mode='no-cors';
     return fetch(baseUrl,param)
-    .then(checkOut504)
-    .then(checkOut401)
-    .then(dataJson)
-}
+        .then(checkOut504)
+        .then(checkOut401)
+        .then(dataJson);
+};

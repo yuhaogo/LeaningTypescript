@@ -7,63 +7,63 @@ const tsImportPluginFactory=require('ts-import-plugin');
 let Config={
     mode:'production',
     output: {
-      filename: 'app.[name].js'
+        filename: 'app.[name].js'
     },
     entry: {
-      app:[
-        './app/index.tsx'
-      ]
+        app:[
+            './app/index.tsx'
+        ]
     },
     plugins: [
         new HtmlWebpackPlugin({
-          template:'./app/index.html',
-          inject: false
+            template:'./app/index.html',
+            inject: false
         }),
-      ],
+    ],
     output: {
-      filename: 'app.bundle.js',
-      path: Path.join(__dirname,'./public'),
+        filename: 'app.bundle.js',
+        path: Path.join(__dirname,'./public'),
     },
     resolve: {
-      extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js']
+        extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js']
     },
     devtool: 'cheap-module-source-map',
     module: {
-      rules: [
-        {
-          test: /\.tsx|.ts$/, // include .js files
-          exclude: /node_modules/, // exclude any and all files in the node_modules folder
-          loader:'ts-loader',
-          options:{
-                transpileOnly: true,
-                getCustomTransformers:()=>({
-                  before:[
-                    tsImportPluginFactory({
-                      libraryDirectory: 'es',
-                      libraryName: 'antd',
-                      style: 'css',
-                    })
-                  ]
-                }),
-                compilerOptions: {
-                  module: 'es6'
+        rules: [
+            {
+                test: /\.tsx|.ts$/, // include .js files
+                exclude: /node_modules/, // exclude any and all files in the node_modules folder
+                loader:'ts-loader',
+                options:{
+                    transpileOnly: true,
+                    getCustomTransformers:()=>({
+                        before:[
+                            tsImportPluginFactory({
+                                libraryDirectory: 'es',
+                                libraryName: 'antd',
+                                style: 'css',
+                            })
+                        ]
+                    }),
+                    compilerOptions: {
+                        module: 'es6'
+                    }
                 }
-              }
-        },
-        {
-          test: /\.js$/,
-          use: ['babel-loader'],
-          exclude: /node_modules/
-        },
-        {
-          test:/\.(css|less)$/,
-          use:['style-loader','css-loader','less-loader']
-        },
-        {
-          test:/\.(png|jpg|gif|jpeg|woff|woff2)$/,
-          use:['url-loader?limit=8192']
-        }
-      ]
+            },
+            {
+                test: /\.js$/,
+                use: ['babel-loader'],
+                exclude: /node_modules/
+            },
+            {
+                test:/\.(css|less)$/,
+                use:['style-loader','css-loader','less-loader']
+            },
+            {
+                test:/\.(png|jpg|gif|jpeg|woff|woff2)$/,
+                use:['url-loader?limit=8192']
+            }
+        ]
     }
 };
 

@@ -17,26 +17,26 @@ class Scroll extends Component<any,any>{
             step:0,
             isTouch:false,
             top:'100%'
-        }
+        };
     }
     componentDidMount(){
         setTimeout(()=>{
             this.resize();
-        },0)
+        },0);
     }
     handleScroll=(e:any)=>{
         const {step}=this.state;
         const scrollTop=e.target.scrollTop;
         this.setState({
             sliderTop:scrollTop*step
-        })
+        });
 
     }
     handleMouseDown=(e:any)=>{
-       this.mouseY=e.pageY;
-       this.setState({
-           isTouch:true
-       })
+        this.mouseY=e.pageY;
+        this.setState({
+            isTouch:true
+        });
     }
     handleMouseMove=(e:any)=>{
         if(this.state.isTouch){
@@ -49,7 +49,7 @@ class Scroll extends Component<any,any>{
     handleMouseUp=()=>{
         this.setState({
             isTouch:false
-        })
+        });
     }
     //重置滑块大小
     resize=()=>{
@@ -58,7 +58,7 @@ class Scroll extends Component<any,any>{
             sliderHeight:step>1?0:Math.floor(step*100),
             step:step,
             top:0
-        })
+        });
     }
     render():JSX.Element{
         const {children}=this.props;
@@ -76,7 +76,7 @@ class Scroll extends Component<any,any>{
                 </div>
                 <div className={`scroll-shade ${shadeClassName}`} onMouseMove={this.handleMouseMove} onMouseUp={this.handleMouseUp}></div>
             </div>
-        )
+        );
     }
 }
 export default Scroll;

@@ -36,12 +36,32 @@
 
 /*方块模组*/
 .diamond-box-main{
-    width: 50%;
+    width: 48%;
     display: block;
     float: left;
+    border:1px solid transparent;
+    padding: 10px;
+    margin:0 2% 10px 0;
+    &.diamond-box-edit{
+        background-color: rgba(0,0,0,0.3);
+        border:1px solid #fff;
+        .diamond-box-title{
+            .diamond-box-tools{
+                float: right;
+                display: block;
+            }
+        }
+    }
     .diamond-box-title{
         width: auto;
         font-size: 30px;
         color: #fff;
+        .diamond-box-tools{
+            display:none;
+            .anticon{
+                cursor: pointer;
+                margin-left: 5px;
+            }
+        }
     }
 }

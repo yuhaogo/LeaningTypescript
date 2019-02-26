@@ -25,7 +25,7 @@ class App extends React.Component{
                     </Switch>
                 </BrowserRouter>
             </Provider>
-        )
+        );
     }
 }
 
@@ -33,7 +33,7 @@ render(
     <AppContainer>
         <App />
     </AppContainer>
-,document.getElementById("app"));
+    ,document.getElementById('app'));
 
 if ((module as any).hot) {
     (module as any).hot.accept();
