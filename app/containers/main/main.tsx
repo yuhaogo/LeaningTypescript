@@ -9,9 +9,11 @@ import DiamondBox from '../../component/diamond/diamond';
 import Scroll from '../../component/scroll/scroll';
 import Detail from './component/detail';
 import Drag from '../../component/drag/drag';
+
+import AddDiamondForm from './form/addDiamondform';
 const {DragItem}=Drag;
 const {Sider,Content}=Layout;
-const {getDiamondBoxs,diamondVerify}=actions;
+const {getDiamondBoxs,diamondVerify,diamondAdd}=actions;
 interface stateType {
     customDias:[],          //自定义方块合集
     detail:boolean,         //详细页
@@ -19,12 +21,16 @@ interface stateType {
     diamondPassword:string, //方块密码
     diamondVerify:boolean,  //方块验证通过
     diamondMessage:string,  //方块验证信息
-    editStatus:boolean      //编辑状态
+    editStatus:boolean,     //编辑状态
+    addModalVisible:boolean,//新增小方块模块框显示隐藏
+    nowDiamondItemId:string //当前小方块id
 }
 
 class Index extends React.Component<any,stateType>{
     private scrollObj:any;
     private diamondData:any;
+    //表单对象
+    private AddForm:any;
     constructor(props:any){
         super(props);
         this.state={
@@ -34,7 +40,9 @@ class Index extends React.Component<any,stateType>{
             diamondPassword:'',
             diamondVerify:true,
             diamondMessage:'',
-            editStatus:false
+            editStatus:false,
+            addModalVisible:false,
+            nowDiamondItemId:''
         };
     }
     componentDidMount(){
@@ -56,6 +64,10 @@ class Index extends React.Component<any,stateType>{
         dias=customDias.map((item:any)=>{
             return (
                 <DragItem key={item.id} value={item.id}>
+                    <div className="diamond-box-tools">
+                        <Icon type="plus-square" onClick={e=>this.addChilds(e,item.id)}/>
+                        <Icon type="close-square" />
+                    </div>
                     <DiamondBox title={item.name} childs={item.childs} onDiamondClick={this.onDetail} status={editStatus?1:0}/>
                 </DragItem>
             );
@@ -139,8 +151,44 @@ class Index extends React.Component<any,stateType>{
             editStatus:!editStatus
         });
     }
+    //新增小方块
+    addChilds=(e:React.MouseEvent<HTMLDivElement>,nowItemId:string)=>{
+        e.preventDefault();
+        e.stopPropagation();
+        const {addModalVisible}=this.state;
+        this.setState({
+            addModalVisible:!addModalVisible,
+            nowDiamondItemId:nowItemId
+        });
+
+    }
+    //新增小方块保存
+    onAddSave=()=>{
+        const {nowDiamondItemId}=this.state;
+        const {getFieldsValue}=this.AddForm.props.form;
+        const values=getFieldsValue();
+        for (const key in values) {
+            if (values.hasOwnProperty(key)) {
+                const value = values[key];
+                
+            }
+        }
+        values.lock=values.lock?1:0;
+        values.id=nowDiamondItemId;
+        diamondAdd(values).then((data: any)=>{
+            this.setState({
+                addModalVisible:false
+            });
+        });
+    }
+    //取消新增
+    onCancelAdd=()=>{
+        this.setState({
+            addModalVisible:false
+        });
+    }
     render():JSX.Element{
-        const {detail,editStatus}=this.state;
+        const {detail,editStatus,addModalVisible,modal1Visible,diamondVerify,diamondMessage,diamondPassword}=this.state;
         const customDias=this.customDiamonds();
         return(
             <div className="main">
@@ -183,12 +231,23 @@ class Index extends React.Component<any,stateType>{
                 <Modal
                     title="验证"
                     style={{ top: 20 }}
-                    visible={this.state.modal1Visible}
+                    visible={modal1Visible}
                     onOk={() => this.setModal1Visible('ok')}
                     onCancel={() => this.setModal1Visible('cancel')}
                 >
-                    {this.state.diamondVerify?'':<Alert message={this.state.diamondMessage} style={{marginBottom:10}} type="error" showIcon />}
-                    <Input placeholder="password" type="password" value={this.state.diamondPassword} onChange={this.changeDiamondPassword} />
+                    {diamondVerify?'':<Alert message={diamondMessage} style={{marginBottom:10}} type="error" showIcon />}
+                    <Input placeholder="password" type="password" value={diamondPassword} onChange={this.changeDiamondPassword} />
+                </Modal>
+                <Modal
+                    title="新增"
+                    style={{ top: 20 }}
+                    visible={addModalVisible}
+                    onOk={this.onAddSave}
+                    onCancel={this.onCancelAdd}
+                >
+                    <AddDiamondForm
+                        component={(comp:any)=>this.AddForm=comp}
+                    />
                 </Modal>
             </div>
         );

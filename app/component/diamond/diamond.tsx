@@ -1,9 +1,7 @@
 
 require('./diamond.less');
 import * as React from 'react';
-import {Icon, Modal} from 'antd';
-
-import AddDiamondForm from './form/addDiamondform';
+import {Icon} from 'antd';
 //小方块
 export class Diamond extends React.Component<any,any>{
     constructor(props:any){
@@ -24,6 +22,7 @@ export class Diamond extends React.Component<any,any>{
 
 //方块集合
 class DiamondBox extends React.PureComponent<any,any>{
+    private AddForm:any;
     constructor(props:any){
         super(props);
         this.state={
@@ -37,17 +36,6 @@ class DiamondBox extends React.PureComponent<any,any>{
             return <Diamond key={item.id} color={item.color} type={item.type} {...item} onClick={onDiamondClick} />;
         });
     }
-    //新增小方块
-    addChilds=(e:React.MouseEvent<HTMLDivElement>)=>{
-        console.log('add');
-        e.preventDefault();
-        e.stopPropagation();
-        const {addModalVisible}=this.state;
-        this.setState({
-            addModalVisible:!addModalVisible
-        });
-
-    }
     render():JSX.Element{
         const {addModalVisible}=this.state;
         const {title,status}=this.props;
@@ -57,21 +45,10 @@ class DiamondBox extends React.PureComponent<any,any>{
             <div className={`diamond-box-main ${toolsClassName}`}>
                 <h3 className="diamond-box-title">
                     {title}
-                    <div className="diamond-box-tools">
-                        <Icon type="plus-square" onClick={this.addChilds}/>
-                        <Icon type="close-square" />
-                    </div>
                 </h3>
                 <div className="diamond-box-children">
                     {diamondList}
                 </div>
-                <Modal
-                    title="新增"
-                    style={{ top: 20 }}
-                    visible={addModalVisible}
-                >
-                    <AddDiamondForm />
-                </Modal>
             </div>
         );      
     }
