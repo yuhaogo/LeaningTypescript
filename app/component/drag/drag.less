@@ -1,0 +1,77 @@
+.drag-body{
+    position: relative;
+    .drag-childs{
+        column-count: 2;
+        column-gap: 0;
+        &::after{
+            content:"";
+            display: block;
+            clear: both;
+        }
+        .drag-item-move,.drag-item-box{
+            break-inside: avoid;
+            box-sizing: border-box;
+        }
+    }
+    .drag-item-move{
+        position: relative;
+        overflow: hidden;
+        &::after{
+            content:"";
+            display: block;
+            clear: both;
+        }
+        &.drag-item-moving{
+            .drag-item{
+                margin: 0 10px 10px 0;
+                background-color: rgba(0,0,0,0.1);
+                border: 1px dashed #fff;
+                *{
+                    visibility: hidden;
+                }
+            }
+        }
+        .drag-item{
+            margin: 0 10px 10px 0;
+            background-color: rgba(0,0,0,0.3);
+            border:1px solid #fff;
+        }
+        .drag-area{
+            position: absolute;
+            top:0;
+            right: 120px;
+            width: 100%;
+            height: 40px;
+            .drag-bar{
+                cursor: move;
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+    .drag-item-box{
+        .drag-area{
+            display: none;
+        }
+        .drag-item{
+            width: 100%;
+            padding: 0 10px 10px 0;
+        }
+    }
+    .drag-item-cover{
+        position: absolute;
+        display: none;
+        width: 100%;
+        height: 100%;
+        user-select:none;
+        top: 0;
+        left: 0;
+        .drag-item-holder{
+            position: fixed;
+            background-color: rgba(0,0,0,0.3);
+            border:1px solid #fff;
+            width:calc(~"(100%-90px)/2");
+        }
+    }
+    
+}

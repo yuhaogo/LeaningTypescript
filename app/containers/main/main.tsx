@@ -8,6 +8,8 @@ import {Layout, Icon,Modal,Input,Alert} from 'antd';
 import DiamondBox from '../../component/diamond/diamond';
 import Scroll from '../../component/scroll/scroll';
 import Detail from './component/detail';
+import Drag from '../../component/drag/drag';
+const {DragItem}=Drag;
 const {Sider,Content}=Layout;
 const {getDiamondBoxs,diamondVerify}=actions;
 interface stateType {
@@ -52,7 +54,12 @@ class Index extends React.Component<any,stateType>{
         const {customDias,editStatus}=this.state;
         let dias=[];
         dias=customDias.map((item:any)=>{
-            return <DiamondBox title={item.name} key={item.id} childs={item.childs} onDiamondClick={this.onDetail} status={editStatus?1:0}/>;
+            return (
+                <DragItem key={item.id} value={item.id}>
+                    <DiamondBox title={item.name} childs={item.childs} onDiamondClick={this.onDetail} status={editStatus?1:0}/>
+                </DragItem>
+            );
+
         });
         setTimeout(()=>{
             this.scrollObj.resize();
@@ -146,7 +153,11 @@ class Index extends React.Component<any,stateType>{
                             <div className="fl">
                                 <div className="diamond-content">
                                     <Scroll ref={(ref:any)=>this.scrollObj=ref}>
-                                        {customDias}
+                                        <Drag
+                                            move={editStatus}
+                                        >
+                                            {customDias}
+                                        </Drag>
                                     </Scroll>
                                 </div>
                             </div>
@@ -167,8 +178,7 @@ class Index extends React.Component<any,stateType>{
                             <div className="action-btn" >
                                 <Icon type="logout"/>
                             </div>
-                        </Sider>
-                    }
+                        </Sider>}
                 </Layout>
                 <Modal
                     title="验证"

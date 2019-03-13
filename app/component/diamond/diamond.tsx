@@ -8,25 +8,15 @@ import AddDiamondForm from './form/addDiamondform';
 export class Diamond extends React.Component<any,any>{
     constructor(props:any){
         super(props);  
-        this.state={
-            marginBtm:5
-        };
     }
-    componentDidMount(){
-        setTimeout(()=>{
-            this.setState({
-                marginBtm:10
-            });
-        },1000);
-    }
+
     render():JSX.Element{
         const {color,type,name,onClick,lock}=this.props;
-        const {marginBtm}=this.state;
         const _className=type=='big'?'big':'small';
         return(
             <div 
                 className={`diamond-main ${_className}`}
-                style={{backgroundColor:color,marginBottom:marginBtm}}
+                style={{backgroundColor:color,marginBottom:10}}
                 onClick={(e:React.MouseEvent<HTMLDivElement>)=>onClick(e,this.props)}>{lock==1?<Icon className="diamond-lock" type="lock"/>:''}{name}</div>
         );
     }
@@ -48,7 +38,10 @@ class DiamondBox extends React.PureComponent<any,any>{
         });
     }
     //新增小方块
-    addChilds=()=>{
+    addChilds=(e:React.MouseEvent<HTMLDivElement>)=>{
+        console.log('add');
+        e.preventDefault();
+        e.stopPropagation();
         const {addModalVisible}=this.state;
         this.setState({
             addModalVisible:!addModalVisible
