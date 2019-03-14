@@ -64,10 +64,10 @@ class Index extends React.Component<any,stateType>{
         dias=customDias.map((item:any)=>{
             return (
                 <DragItem key={item.id} value={item.id}>
-                    <div className="diamond-box-tools">
-                        <Icon type="plus-square" onClick={e=>this.addChilds(e,item.id)}/>
+                    {editStatus?<div className="diamond-box-tools">
+                        <Icon type="plus-square" onClick={(e:any)=>this.addChilds(e,item.id)}/>
                         <Icon type="close-square" />
-                    </div>
+                    </div>:null}
                     <DiamondBox title={item.name} childs={item.childs} onDiamondClick={this.onDetail} status={editStatus?1:0}/>
                 </DragItem>
             );
@@ -79,7 +79,7 @@ class Index extends React.Component<any,stateType>{
         return dias;
     }
     //切换详细模块
-    onDetail=(e:React.MouseEvent<HTMLDivElement>,item:any)=>{
+    onDetail=(e:any,item:any)=>{
         e.stopPropagation();
         this.diamondData=item;
         if(item.lock==1){
@@ -167,18 +167,16 @@ class Index extends React.Component<any,stateType>{
         const {nowDiamondItemId}=this.state;
         const {getFieldsValue}=this.AddForm.props.form;
         const values=getFieldsValue();
-        for (const key in values) {
-            if (values.hasOwnProperty(key)) {
-                const value = values[key];
-                
-            }
-        }
         values.lock=values.lock?1:0;
         values.id=nowDiamondItemId;
         diamondAdd(values).then((data: any)=>{
-            this.setState({
-                addModalVisible:false
-            });
+            const {success}=data;
+            if(success){
+                this.setState({
+                    addModalVisible:false
+                });
+                this.getDiamondBox();
+            }
         });
     }
     //取消新增
