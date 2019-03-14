@@ -2,6 +2,7 @@ import * as fetch from 'isomorphic-fetch';
 require('es6-promise').polyfill();
 import { Modal } from 'antd';
 import { promises } from 'fs';
+import {resetLockTime} from './lock';
 
 interface result {
     status:number,
@@ -42,6 +43,7 @@ export const cFetch=(apiUrl:any,param:any)=>{
         'Accept': 'application/json',
         'Content-Type': 'application/json'
     };
+    resetLockTime();
     // param.credentials= 'include';
     console.log(param);
     //param.mode='no-cors';

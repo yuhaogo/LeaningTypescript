@@ -2,7 +2,7 @@ import './main.less';
 import 'braft-editor/dist/index.css';
 import * as React from 'react';
 import actions from './action';
-import {Layout, Icon,Modal,Input,Alert} from 'antd';
+import {Layout, Icon,Modal,Input,Alert,Avatar,Menu} from 'antd';
 
 
 import DiamondBox from '../../component/diamond/diamond';
@@ -10,6 +10,7 @@ import Scroll from '../../component/scroll/scroll';
 import Detail from './component/detail';
 import Drag from '../../component/drag/drag';
 
+import {autoLock,resetLockTime} from '../../util/lock';
 import AddDiamondForm from './form/addDiamondform';
 const {DragItem}=Drag;
 const {Sider,Content}=Layout;
@@ -23,7 +24,9 @@ interface stateType {
     diamondMessage:string,  //方块验证信息
     editStatus:boolean,     //编辑状态
     addModalVisible:boolean,//新增小方块模块框显示隐藏
-    nowDiamondItemId:string //当前小方块id
+    nowDiamondBoxId:string, //当前方块盒子id
+    isLock:boolean,         //是否锁定
+    nowDiamondItem:any,     //当前小方块数据
 }
 
 class Index extends React.Component<any,stateType>{
@@ -42,10 +45,19 @@ class Index extends React.Component<any,stateType>{
             diamondMessage:'',
             editStatus:false,
             addModalVisible:false,
-            nowDiamondItemId:''
+            nowDiamondBoxId:'',
+            isLock:false,
+            nowDiamondItem:{}
         };
     }
     componentDidMount(){
+        autoLock((isLock:boolean)=>{
+            if(isLock){
+                this.setState({
+                    isLock:isLock
+                });
+            }
+        });
         this.getDiamondBox();
     }
     //获取方块集合
@@ -68,7 +80,7 @@ class Index extends React.Component<any,stateType>{
                         <Icon type="plus-square" onClick={(e:any)=>this.addChilds(e,item.id)}/>
                         <Icon type="close-square" />
                     </div>:null}
-                    <DiamondBox title={item.name} childs={item.childs} onDiamondClick={this.onDetail} status={editStatus?1:0}/>
+                    <DiamondBox title={item.name} childs={item.childs} menus={this.getMenus} onDiamondClick={this.onDetail} status={editStatus?1:0}/>
                 </DragItem>
             );
 
@@ -151,24 +163,44 @@ class Index extends React.Component<any,stateType>{
             editStatus:!editStatus
         });
     }
+    //获取小方块右键菜单
+    getMenus=(item:any)=>{
+        const menus=(
+            <Menu>
+                <Menu.Item key="1" onClick={()=>this.onDiamondItemEdit(item)}>编辑</Menu.Item>
+                <Menu.Item key="2" onClick={()=>this.onDiamondItemDelete(item)}>删除</Menu.Item>
+            </Menu>);
+        return menus;
+    }
     //新增小方块
-    addChilds=(e:React.MouseEvent<HTMLDivElement>,nowItemId:string)=>{
+    addChilds=(e:React.MouseEvent<HTMLDivElement>,nowBoxId:string)=>{
         e.preventDefault();
         e.stopPropagation();
-        const {addModalVisible}=this.state;
         this.setState({
-            addModalVisible:!addModalVisible,
-            nowDiamondItemId:nowItemId
+            addModalVisible:true,
+            nowDiamondItem:{},
+            nowDiamondBoxId:nowBoxId
         });
+
+    }
+    //编辑小方块
+    onDiamondItemEdit=(nowItem:any)=>{
+        this.setState({
+            addModalVisible:true,
+            nowDiamondItem:nowItem
+        });
+    }
+    //删除小方块
+    onDiamondItemDelete=(nowItem:any)=>{
 
     }
     //新增小方块保存
     onAddSave=()=>{
-        const {nowDiamondItemId}=this.state;
+        const {nowDiamondBoxId}=this.state;
         const {getFieldsValue}=this.AddForm.props.form;
         const values=getFieldsValue();
         values.lock=values.lock?1:0;
-        values.id=nowDiamondItemId;
+        values.id=nowDiamondBoxId;
         diamondAdd(values).then((data: any)=>{
             const {success}=data;
             if(success){
@@ -185,8 +217,15 @@ class Index extends React.Component<any,stateType>{
             addModalVisible:false
         });
     }
+    //锁屏验证
+    lockVerify=()=>{
+        resetLockTime(true);
+        this.setState({
+            isLock:false
+        });
+    }
     render():JSX.Element{
-        const {detail,editStatus,addModalVisible,modal1Visible,diamondVerify,diamondMessage,diamondPassword}=this.state;
+        const {detail,editStatus,addModalVisible,modal1Visible,diamondVerify,diamondMessage,diamondPassword,isLock,nowDiamondItem}=this.state;
         const customDias=this.customDiamonds();
         return(
             <div className="main">
@@ -245,7 +284,22 @@ class Index extends React.Component<any,stateType>{
                 >
                     <AddDiamondForm
                         component={(comp:any)=>this.AddForm=comp}
+                        values={nowDiamondItem}
                     />
+                </Modal>
+                <Modal
+                    title="锁定"
+                    visible={isLock}
+                    closable={false}
+                    cancelButtonProps={{
+                        style:{
+                            display:'none'
+                        }
+                    }}
+                    onOk={this.lockVerify}
+                >   
+                    <div className="lock-avatar"><Avatar style={{ backgroundColor: '#87d068' }} size={80} icon="user" /></div>
+                    <Input addonBefore={<Icon type="lock" />} type="password" />
                 </Modal>
             </div>
         );

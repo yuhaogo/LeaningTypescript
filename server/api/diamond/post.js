@@ -101,7 +101,7 @@ app.post('/adddiamond',function(req,res){
         message:'新增成功'
     };
     var params=req.body;
-    var sql='insert into diamonditem(diamonditem.diamondId,diamonditem.name,diamonditem.type,diamonditem.lock) values ("'+params.id+'","'+ params.name+'","'+params.type+'",'+params.lock+')';
+    var sql='insert into diamonditem(diamonditem.diamondId,diamonditem.name,diamonditem.type,diamonditem.lock,diamonditem.password) values ("'+params.id+'","'+ params.name+'","'+params.type+'",'+params.lock+',"'+params.password+'")';
     mysqls.query(sql,function(suc, rows,message){
         if(suc){
             res.json(rsp);
