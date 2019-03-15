@@ -1,0 +1,49 @@
+@keyframes rotate{
+    from{transform:rotateY(0)}
+    to{transform:rotateY(360deg)}
+}
+.time-box{
+    transform: rotate(90deg);
+    position: relative;
+}
+.time-number{
+    perspective:1000px;
+    position: relative;
+    .time-items{
+        width:40px;
+        height: 40px;
+        position:relative;
+        transform-style:preserve-3d;
+        animation: rotate 5s linear infinite;
+        transform-origin: center;
+        &>div{
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        .time1{
+            transform:rotateY(0deg) translateZ(20px);
+            width:40px;
+            height: 40px;
+            background: red;
+        }
+        .time2{
+            transform:rotateY(90deg) translateZ(20px);
+            width:40px;
+            height: 40px;
+            background: yellow;
+        }
+        .time3{
+            transform:rotateY(180deg) translateZ(20px);
+            width:40px;
+            height: 40px;
+            background: blue;
+        }
+        .time4{
+            transform:rotateY(270deg) translateZ(20px);
+            width:40px;
+            height: 40px;
+            background: green;
+        }
+    }
+}

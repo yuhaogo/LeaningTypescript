@@ -9,6 +9,7 @@ import DiamondBox from '../../component/diamond/diamond';
 import Scroll from '../../component/scroll/scroll';
 import Detail from './component/detail';
 import Drag from '../../component/drag/drag';
+import CountDown from '../../component/countdown/countdown';
 
 import {autoLock,resetLockTime} from '../../util/lock';
 import AddDiamondForm from './form/addDiamondform';
@@ -252,6 +253,9 @@ class Index extends React.Component<any,stateType>{
                         <Sider className="main-actions" width={100}>
                             <div className="action-btn" >
                                 <Icon type="user"/>
+                            </div>
+                            <div className="action-btn">
+                                <CountDown />
                             </div>
                             <div className="action-holder"></div>
                             <div className="action-btn" >
