@@ -1,49 +1,197 @@
 @keyframes rotate{
-    from{transform:rotateY(0)}
-    to{transform:rotateY(360deg)}
+    from{transform: rotateY(0);}
+    to{transform: rotateY(360deg);}
 }
 .time-box{
-    transform: rotate(90deg);
-    position: relative;
+    position: absolute;
+    width: 40px;
+    height: 140px;
+    top: 10px;
+    left: 50%;
+    overflow: hidden;
+    transform: rotate(-90deg);
+    border-radius: 3px;
 }
-.time-number{
-    perspective:1000px;
+.time-colon{
     position: relative;
+    top:40px;
+    color: #000;
+    background: #fff;
+    width:40px;
+    height: 10px;
+    text-align: center;
+    &>span{
+        display: block;
+        transform: rotate(90deg) translateX(-15px);
+    }
+} 
+.time-number{
+    position: absolute;
+    perspective:1000px;
+    width: 100px;
+    height:20px;
+    top: 0;
+    left: -30px;
+    &.hour-2{
+        top: 20px;
+    }
+    &.minute-1{
+        top: 50px;
+    }
+    &.minute-2{
+        top: 70px;
+    }
+    &.second-1{
+        top: 100px;
+    }
+    &.second-2{
+        top: 120px;
+    }
     .time-items{
-        width:40px;
-        height: 40px;
         position:relative;
         transform-style:preserve-3d;
-        animation: rotate 5s linear infinite;
         transform-origin: center;
+        height: 20px;
+        transition-duration: .3s;
         &>div{
             position: absolute;
-            left: 0;
+            left: 30px;
             top: 0;
-        }
-        .time1{
-            transform:rotateY(0deg) translateZ(20px);
+            color: #000;
+            background: #fff;
             width:40px;
-            height: 40px;
-            background: red;
+            height: 20px;
+            border:1px solid #ddd;
+            text-align: center;
+            font-size: 14px;
+            line-height: 20px;
+            &>span{
+                display: block;
+                transform: rotate(90deg);
+            }
         }
-        .time2{
-            transform:rotateY(90deg) translateZ(20px);
-            width:40px;
-            height: 40px;
-            background: yellow;
+        &.start{
+            animation: rotate 10s linear infinite;
         }
-        .time3{
-            transform:rotateY(180deg) translateZ(20px);
-            width:40px;
-            height: 40px;
-            background: blue;
+        &.rotate-3-1{
+            transform: rotateY(0deg)
         }
-        .time4{
-            transform:rotateY(270deg) translateZ(20px);
-            width:40px;
-            height: 40px;
-            background: green;
+        &.rotate-3-2{
+            transform: rotateY(120deg)
+        }
+        &.rotate-3-3{
+            transform: rotateY(240deg)
+        }
+        &.rotate-6-0{
+            transform: rotateY(0deg)
+        }
+        &.rotate-6-1{
+            transform: rotateY(-60deg)
+        }
+        &.rotate-6-2{
+            transform: rotateY(-120deg)
+        }
+        &.rotate-6-3{
+            transform: rotateY(-180deg)
+        }
+        &.rotate-6-4{
+            transform: rotateY(-240deg)
+        }
+        &.rotate-6-5{
+            transform: rotateY(-300deg)
+        }
+        &.rotate-10-0{
+            transform: rotateY(0)
+        }
+        &.rotate-10-1{
+            transform: rotateY(-36deg)
+        }
+        &.rotate-10-2{
+            transform: rotateY(-72deg)
+        }
+        &.rotate-10-3{
+            transform: rotateY(-108deg)
+        }
+        &.rotate-10-4{
+            transform: rotateY(-144deg)
+        }
+        &.rotate-10-5{
+            transform: rotateY(-180deg)
+        }
+        &.rotate-10-6{
+            transform: rotateY(-216deg)
+        }
+        &.rotate-10-7{
+            transform: rotateY(-252deg)
+        }
+        &.rotate-10-8{
+            transform: rotateY(-288deg)
+        }
+        &.rotate-10-9{
+            transform: rotateY(-324deg)
+        }
+        &.rotate-10{
+            .time0{
+                transform:rotateY(0deg) translateZ(60px);
+            }
+            .time1{
+                transform:rotateY(36deg) translateZ(60px);
+            }
+            .time2{
+                transform:rotateY(72deg) translateZ(60px);
+            }
+            .time3{
+                transform:rotateY(108deg) translateZ(60px);
+            }
+            .time4{
+                transform:rotateY(144deg) translateZ(60px);
+            }
+            .time5{
+                transform:rotateY(180deg) translateZ(60px);
+            }
+            .time6{
+                transform:rotateY(216deg) translateZ(60px);
+            }
+            .time7{
+                transform:rotateY(252deg) translateZ(60px);
+            }
+            .time8{
+                transform:rotateY(288deg) translateZ(60px);
+            }
+            .time9{
+                transform:rotateY(324deg) translateZ(60px);
+            }
+        }
+        &.rotate-6{
+            .time0{
+                transform:rotateY(0deg) translateZ(34px);
+            }
+            .time1{
+                transform:rotateY(60deg) translateZ(34px);
+            }
+            .time2{
+                transform:rotateY(120deg) translateZ(34px);
+            }
+            .time3{
+                transform:rotateY(180deg) translateZ(34px);
+            }
+            .time4{
+                transform:rotateY(240deg) translateZ(34px);
+            }
+            .time5{
+                transform:rotateY(300deg) translateZ(34px);
+            }
+        }
+        &.rotate-3{
+            .time0{
+                transform:rotateY(0deg) translateZ(11px);
+            }
+            .time1{
+                transform:rotateY(120deg) translateZ(11px);
+            }
+            .time2{
+                transform:rotateY(240deg) translateZ(11px);
+            }
         }
     }
 }

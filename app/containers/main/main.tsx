@@ -248,14 +248,12 @@ class Index extends React.Component<any,stateType>{
                                 </div>
                             </div>
                         </div>
+                        <CountDown hour={2} minute={0} second={0} />
                     </Content>
                     {detail?null:
                         <Sider className="main-actions" width={100}>
                             <div className="action-btn" >
                                 <Icon type="user"/>
-                            </div>
-                            <div className="action-btn">
-                                <CountDown />
                             </div>
                             <div className="action-holder"></div>
                             <div className="action-btn" >
