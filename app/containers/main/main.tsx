@@ -2,7 +2,7 @@ import './main.less';
 import 'braft-editor/dist/index.css';
 import * as React from 'react';
 import actions from './action';
-import {Layout, Icon,Modal,Input,Alert,Avatar,Menu} from 'antd';
+import {Layout, Icon,Modal,Input,Alert,Avatar,Menu,Popconfirm} from 'antd';
 
 
 import DiamondBox from '../../component/diamond/diamond';
@@ -15,7 +15,7 @@ import {autoLock,resetLockTime} from '../../util/lock';
 import AddDiamondForm from './form/addDiamondform';
 const {DragItem}=Drag;
 const {Sider,Content}=Layout;
-const {getDiamondBoxs,diamondVerify,diamondAdd}=actions;
+const {getDiamondBoxs,diamondVerify,diamondBoxAdd}=actions;
 interface stateType {
     customDias:[],          //自定义方块合集
     detail:boolean,         //详细页
@@ -28,13 +28,12 @@ interface stateType {
     nowDiamondBoxId:string, //当前方块盒子id
     isLock:boolean,         //是否锁定
     nowDiamondItem:any,     //当前小方块数据
+    addDiamondBoxName:string//新增盒子名称
 }
 
 class Index extends React.Component<any,stateType>{
     private scrollObj:any;
     private diamondData:any;
-    //表单对象
-    private AddForm:any;
     constructor(props:any){
         super(props);
         this.state={
@@ -47,6 +46,7 @@ class Index extends React.Component<any,stateType>{
             editStatus:false,
             addModalVisible:false,
             nowDiamondBoxId:'',
+            addDiamondBoxName:'',
             isLock:false,
             nowDiamondItem:{}
         };
@@ -84,7 +84,6 @@ class Index extends React.Component<any,stateType>{
                     <DiamondBox title={item.name} childs={item.childs} menus={this.getMenus} onDiamondClick={this.onDetail} status={editStatus?1:0}/>
                 </DragItem>
             );
-
         });
         setTimeout(()=>{
             this.scrollObj.resize();
@@ -179,8 +178,9 @@ class Index extends React.Component<any,stateType>{
         e.stopPropagation();
         this.setState({
             addModalVisible:true,
-            nowDiamondItem:{},
-            nowDiamondBoxId:nowBoxId
+            nowDiamondItem:{
+                nowBoxId:nowBoxId
+            }
         });
 
     }
@@ -195,23 +195,6 @@ class Index extends React.Component<any,stateType>{
     onDiamondItemDelete=(nowItem:any)=>{
 
     }
-    //新增小方块保存
-    onAddSave=()=>{
-        const {nowDiamondBoxId}=this.state;
-        const {getFieldsValue}=this.AddForm.props.form;
-        const values=getFieldsValue();
-        values.lock=values.lock?1:0;
-        values.id=nowDiamondBoxId;
-        diamondAdd(values).then((data: any)=>{
-            const {success}=data;
-            if(success){
-                this.setState({
-                    addModalVisible:false
-                });
-                this.getDiamondBox();
-            }
-        });
-    }
     //取消新增
     onCancelAdd=()=>{
         this.setState({
@@ -225,8 +208,27 @@ class Index extends React.Component<any,stateType>{
             isLock:false
         });
     }
+    //新增方块的盒子
+    onAddDiamondBox=()=>{
+        const {addDiamondBoxName}=this.state;
+        diamondBoxAdd({
+            name:addDiamondBoxName
+        }).then((data:any)=>{
+            const {success}=data;
+            if(success){
+                this.getDiamondBox();;
+            }
+        });
+    }
+    //盒子名称
+    inputChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
+        const {value}=e.target;
+        this.setState({
+            addDiamondBoxName:value
+        });
+    }
     render():JSX.Element{
-        const {detail,editStatus,addModalVisible,modal1Visible,diamondVerify,diamondMessage,diamondPassword,isLock,nowDiamondItem}=this.state;
+        const {detail,editStatus,addModalVisible,modal1Visible,diamondVerify,diamondMessage,diamondPassword,isLock,nowDiamondItem,addDiamondBoxName}=this.state;
         const customDias=this.customDiamonds();
         return(
             <div className="main">
@@ -235,6 +237,7 @@ class Index extends React.Component<any,stateType>{
                         <div className={'content-body' + (detail?' detail':'')}>
                             <div className="fl">
                                 {detail?<Detail onBackClick={this.onBack} {...this.diamondData} />:null}
+                                <CountDown hour={20} minute={0} second={0} />
                             </div>
                             <div className="fl">
                                 <div className="diamond-content">
@@ -248,7 +251,6 @@ class Index extends React.Component<any,stateType>{
                                 </div>
                             </div>
                         </div>
-                        <CountDown hour={2} minute={0} second={0} />
                     </Content>
                     {detail?null:
                         <Sider className="main-actions" width={100}>
@@ -256,8 +258,10 @@ class Index extends React.Component<any,stateType>{
                                 <Icon type="user"/>
                             </div>
                             <div className="action-holder"></div>
-                            <div className="action-btn" >
-                                <Icon type="plus-circle" />
+                            <div className="action-btn">
+                                <Popconfirm placement="leftTop" icon={<Icon type="block" />} title={<Input placeholder="盒子名称" onChange={this.inputChange} value={addDiamondBoxName}/>} onConfirm={this.onAddDiamondBox} okText="Yes" cancelText="No">
+                                    <Icon type="plus-circle" />
+                                </Popconfirm>
                             </div>
                             <div className={'action-btn'+(editStatus?' active':'')} onClick={this.onTransitionEditStatus} >
                                 <Icon type="form"/>
@@ -273,22 +277,22 @@ class Index extends React.Component<any,stateType>{
                     visible={modal1Visible}
                     onOk={() => this.setModal1Visible('ok')}
                     onCancel={() => this.setModal1Visible('cancel')}
+                    destroyOnClose={true}
                 >
                     {diamondVerify?'':<Alert message={diamondMessage} style={{marginBottom:10}} type="error" showIcon />}
                     <Input placeholder="password" type="password" value={diamondPassword} onChange={this.changeDiamondPassword} />
                 </Modal>
-                <Modal
+                <AddDiamondForm
                     title="新增"
-                    style={{ top: 20 }}
                     visible={addModalVisible}
-                    onOk={this.onAddSave}
+                    values={nowDiamondItem}
+                    onCallBack={()=>{
+                        this.setState({
+                            addModalVisible:false
+                        });
+                        this.getDiamondBox();}}
                     onCancel={this.onCancelAdd}
-                >
-                    <AddDiamondForm
-                        component={(comp:any)=>this.AddForm=comp}
-                        values={nowDiamondItem}
-                    />
-                </Modal>
+                />
                 <Modal
                     title="锁定"
                     visible={isLock}
@@ -299,6 +303,7 @@ class Index extends React.Component<any,stateType>{
                         }
                     }}
                     onOk={this.lockVerify}
+                    destroyOnClose={true}
                 >   
                     <div className="lock-avatar"><Avatar style={{ backgroundColor: '#87d068' }} size={80} icon="user" /></div>
                     <Input addonBefore={<Icon type="lock" />} type="password" />

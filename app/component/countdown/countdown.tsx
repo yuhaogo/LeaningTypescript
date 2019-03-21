@@ -5,7 +5,8 @@ class CountDown extends React.Component<any,any>{
     constructor(props:any){
         super(props);
         this.state={
-            second2:false,
+            secondStart:false,
+            second2:'',
             second1:'',
             minute1:'',
             minute2:'',
@@ -22,14 +23,23 @@ class CountDown extends React.Component<any,any>{
             if(!secondCount){
                 clearInterval(countdown);
             }
-            const _hour1=Math.floor(secondCount/36000%3);
-            const _hour2=Math.floor(secondCount/3600%10);
-            const _minute1=Math.floor(secondCount/600%6);
-            const _minute2=Math.floor(secondCount/60%10);
-            const _second1=Math.floor(secondCount/10%6);
+            const _hour1=Math.floor((secondCount-1)/36000%3);
+            const _hour2=Math.floor((secondCount-1)/3600%10);
+            const _minute1=Math.floor((secondCount-1)/600%6);
+            const _minute2=Math.floor((secondCount-1)/60%10);
+            const _second1=Math.floor((secondCount-1)/10%6);
+            const _second2=Math.floor((secondCount-1)%10);
+            if(_second2<=0){
+                setTimeout(()=>{
+                    this.setState({
+                        second2:'rotate-10'
+                    });
+                },900);
+            }
             this.setState({
                 secondStart:true,
                 second1:`rotate-6 rotate-6-${_second1}`,
+                second2:`rotate-10 rotate-10-animate rotate-10-${_second2}`,
                 minute1:`rotate-6 rotate-6-${_minute1}`,
                 minute2:`rotate-10 rotate-10-${_minute2}`,
                 hour1:`rotate-3 rotate-3-${_hour1}`,
@@ -44,7 +54,7 @@ class CountDown extends React.Component<any,any>{
     }
     render():JSX.Element{
         this.init();
-        const {second1,minute1,minute2,hour1,hour2,secondStart}=this.state;
+        const {second1,minute1,minute2,hour1,hour2,second2,secondStart}=this.state;
         return(
             <div className="time-box">
                 <div className="time-number hour-1">
@@ -68,7 +78,6 @@ class CountDown extends React.Component<any,any>{
                         <div className="time9"><span>9</span></div>
                     </div>
                 </div>
-                <div className="time-colon"><span>:</span></div>
                 <div className="time-number minute-1">
                     <div className={`time-items ${minute1}`}>
                         <div className="time0"><span>0</span></div>
@@ -93,7 +102,6 @@ class CountDown extends React.Component<any,any>{
                         <div className="time9"><span>9</span></div>
                     </div>
                 </div>
-                <div className="time-colon"><span>:</span></div>
                 <div className="time-number second-1">
                     <div className={`time-items ${second1}`}>
                         <div className="time0"><span>0</span></div>
@@ -105,7 +113,35 @@ class CountDown extends React.Component<any,any>{
                     </div>
                 </div>
                 <div className="time-number second-2">
-                    <div className={`time-items ${secondStart?'rotate-10 start':''}`}>
+                    <div className={`time-items ${second2}`}>
+                        <div className="time0"><span>0</span></div>
+                        <div className="time1"><span>1</span></div>
+                        <div className="time2"><span>2</span></div>
+                        <div className="time3"><span>3</span></div>
+                        <div className="time4"><span>4</span></div>
+                        <div className="time5"><span>5</span></div>
+                        <div className="time6"><span>6</span></div>
+                        <div className="time7"><span>7</span></div>
+                        <div className="time8"><span>8</span></div>
+                        <div className="time9"><span>9</span></div>
+                    </div>
+                </div>
+                <div className="time-number msec-1">
+                    <div className={`time-items ${secondStart?'rotate-10 start1':''}`}>
+                        <div className="time0"><span>0</span></div>
+                        <div className="time1"><span>1</span></div>
+                        <div className="time2"><span>2</span></div>
+                        <div className="time3"><span>3</span></div>
+                        <div className="time4"><span>4</span></div>
+                        <div className="time5"><span>5</span></div>
+                        <div className="time6"><span>6</span></div>
+                        <div className="time7"><span>7</span></div>
+                        <div className="time8"><span>8</span></div>
+                        <div className="time9"><span>9</span></div>
+                    </div>
+                </div>
+                <div className="time-number msec-2">
+                    <div className={`time-items ${secondStart?'rotate-10 start2':''}`}>
                         <div className="time0"><span>0</span></div>
                         <div className="time1"><span>1</span></div>
                         <div className="time2"><span>2</span></div>

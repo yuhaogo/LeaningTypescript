@@ -24,7 +24,7 @@ class Detail extends React.Component<any,stateType>{
             spinning:false,
             isEditTitle:false,
             diamondTitle:''
-        }
+        };
     }
     componentDidMount(){
         this.getContents();
@@ -41,8 +41,8 @@ class Detail extends React.Component<any,stateType>{
                     contentsTitle:data.title,
                     contents:data.contents,
                     editorState: BraftEditor.createEditorState(data.contents)
-                })
-            })
+                });
+            });
         }
     }
     //开启编辑
@@ -51,21 +51,21 @@ class Detail extends React.Component<any,stateType>{
         const {isEdit}=this.state;
         this.setState({
             isEdit:!isEdit
-        })
+        });
     }
     //返回上级
     onBack=()=>{
         const {onBackClick}=this.props;
         this.setState({
             isEdit:false
-        })
+        });
         onBackClick();
     }
     //保存编辑内容
     onSaveEditContents=()=>{
         this.setState({
             spinning:true
-        })
+        });
         const {contentId}=this.props;
         const {contents,contentsTitle}=this.state;
         saveDiamondContents({
@@ -82,27 +82,27 @@ class Detail extends React.Component<any,stateType>{
             this.setState({
                 spinning:false
             });
-        })
+        });
     }
     //获取富文本编辑器内容
     handleChange = (editorState:any) => {
         this.setState({
             editorState:editorState,
             contents: editorState.toHTML()
-        })
+        });
     }
     //内容标题输入
     inputChange=(e:any)=>{
         const {value}=e.target;
         this.setState({
             contentsTitle:value
-        })
+        });
     }
     //打开设置方块标题
     setDiamondTitle=()=>{
         this.setState({
             isEditTitle:true
-        })
+        });
     }
     //保存方块标题
     saveDiamondTitle=(e:any)=>{
@@ -122,23 +122,23 @@ class Detail extends React.Component<any,stateType>{
         const {name}=this.props;
         let _diamondTitle=diamondTitle?diamondTitle:name;
         return(<div className="diamond-detail">
-                    <div className="top-bar">
-                        <div className="diamond-title">
-                        {!isEditTitle?
-                            <p onClick={this.setDiamondTitle}>{_diamondTitle}</p>:
+            <div className="top-bar">
+                <div className="diamond-title">
+                    {!isEditTitle?
+                        <p onClick={this.setDiamondTitle}>{_diamondTitle}</p>:
                             <>
                                 <Input defaultValue={_diamondTitle} onBlur={this.saveDiamondTitle}/>
                             </>
-                        }
-                        </div>
-                        <Icon type="edit" onClick={this.onEdit} className={isEdit?'active':''}/>
-                        <Icon type="right" onClick={this.onBack} />
-                    </div>
-                    <div className="detail-content">
-                        <Spin
-                            spinning={spinning}
-                            tip="保存中...">
-                            {isEdit?
+                    }
+                </div>
+                <Icon type="edit" onClick={this.onEdit} className={isEdit?'active':''}/>
+                <Icon type="right" onClick={this.onBack} />
+            </div>
+            <div className="detail-content">
+                <Spin
+                    spinning={spinning}
+                    tip="保存中...">
+                    {isEdit?
                                 <>
                                 <div className="content-title">
                                     <h3><Icon type="flag" />副标题</h3>
@@ -152,14 +152,14 @@ class Detail extends React.Component<any,stateType>{
                                     <Button type="primary" onClick={this.onSaveEditContents}>保存</Button>
                                 </div>
                                 </>:
-                                <div className="detail-html">
-                                    <h3>{contentsTitle}</h3>
-                                    <div dangerouslySetInnerHTML={{__html:contents}}></div>
-                                </div>
-                            }
-                        </Spin>
-                    </div>
-                </div>)
+                        <div className="detail-html">
+                            <h3>{contentsTitle}</h3>
+                            <div dangerouslySetInnerHTML={{__html:contents}}></div>
+                        </div>
+                    }
+                </Spin>
+            </div>
+        </div>);
     }
 }
 export default Detail;

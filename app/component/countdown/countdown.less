@@ -5,12 +5,12 @@
 .time-box{
     position: absolute;
     width: 40px;
-    height: 140px;
-    top: 10px;
-    left: 50%;
-    overflow: hidden;
+    height: 190px;
+    top: -70px;
+    left: 100px;
     transform: rotate(-90deg);
-    border-radius: 3px;
+    overflow: hidden;
+    z-index: 998;
 }
 .time-colon{
     position: relative;
@@ -47,12 +47,18 @@
     &.second-2{
         top: 120px;
     }
+    &.msec-1{
+        top: 150px;
+    }
+    &.msec-2{
+        top: 170px;
+    }
     .time-items{
         position:relative;
         transform-style:preserve-3d;
         transform-origin: center;
         height: 20px;
-        transition-duration: .3s;
+        transform: rotateY(-360deg);
         &>div{
             position: absolute;
             left: 30px;
@@ -61,7 +67,6 @@
             background: #fff;
             width:40px;
             height: 20px;
-            border:1px solid #ddd;
             text-align: center;
             font-size: 14px;
             line-height: 20px;
@@ -70,20 +75,23 @@
                 transform: rotate(90deg);
             }
         }
-        &.start{
-            animation: rotate 10s linear infinite;
+        &.start1{
+            animation: rotate 1s linear infinite;
+        }
+        &.start2{
+            animation: rotate 0.1s linear infinite;
         }
         &.rotate-3-1{
-            transform: rotateY(0deg)
+            transform: rotateY(-120deg)
         }
         &.rotate-3-2{
-            transform: rotateY(120deg)
+            transform: rotateY(-240deg)
         }
-        &.rotate-3-3{
-            transform: rotateY(240deg)
+        &.rotate-3-0{
+            transform: rotateY(-360deg)
         }
         &.rotate-6-0{
-            transform: rotateY(0deg)
+            transform: rotateY(0)
         }
         &.rotate-6-1{
             transform: rotateY(-60deg)
@@ -100,8 +108,9 @@
         &.rotate-6-5{
             transform: rotateY(-300deg)
         }
+
         &.rotate-10-0{
-            transform: rotateY(0)
+            transform: rotateY(0);
         }
         &.rotate-10-1{
             transform: rotateY(-36deg)
@@ -131,6 +140,10 @@
             transform: rotateY(-324deg)
         }
         &.rotate-10{
+            &.rotate-10-animate{
+                transition-property:transform;
+                transition-duration:1s;
+            }
             .time0{
                 transform:rotateY(0deg) translateZ(60px);
             }
@@ -163,6 +176,8 @@
             }
         }
         &.rotate-6{
+            transition-property:transform;
+            transition-duration:1s;
             .time0{
                 transform:rotateY(0deg) translateZ(34px);
             }
@@ -183,6 +198,8 @@
             }
         }
         &.rotate-3{
+            transition-property:transform;
+            transition-duration:1s;
             .time0{
                 transform:rotateY(0deg) translateZ(11px);
             }

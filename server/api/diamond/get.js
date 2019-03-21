@@ -6,7 +6,7 @@ app.get('/boxs',function(req,res){
         success:true,
         data:[],
         message:'加载成功'
-    }
+    };
     var sql='SELECT * FROM diamond';
     var sql2='SELECT * FROM diamonditem';
     mysqls.query(sql,function(suc, rows,message){
@@ -23,23 +23,20 @@ app.get('/boxs',function(req,res){
         }
         mysqls.query(sql2,function(suc2, rows2,message2){
             if(suc2){
-                if(rows2.length>0){
-                    for (let i = 0; i < data.length; i++) {
-                        const item = data[i];
-                        item.childs=rows2.filter(_item=>item.id===_item.diamondId);
-                    }
-                    rsp.data=data;
-                }else{
-                    rsp.success=false;
-                    rsp.message=message2;
+                for (let i = 0; i < data.length; i++) {
+                    const item = data[i];
+                    item.childs=rows2.filter(_item=>item.id==_item.diamondId);
                 }
+                rsp.data=data;
+                rsp.success=true;
+                rsp.message=message2;
                 res.json(rsp);
                 return;
             }
             rsp.success=false;
             rsp.message=message2;
             res.json(rsp);
-        })
-    })
-})
+        });
+    });
+});
 module.exports=app;

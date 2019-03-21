@@ -13,6 +13,7 @@ export const autoLock=(callback?:(lock:boolean)=>void)=>{
             Minute=999999999;
             isLock=true;
         }
+        console.log('lock');
         callback(isLock);
     },60000);
 };

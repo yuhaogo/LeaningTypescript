@@ -101,7 +101,33 @@ app.post('/adddiamond',function(req,res){
         message:'新增成功'
     };
     var params=req.body;
-    var sql='insert into diamonditem(diamonditem.diamondId,diamonditem.name,diamonditem.type,diamonditem.lock,diamonditem.password) values ("'+params.id+'","'+ params.name+'","'+params.type+'",'+params.lock+',"'+params.password+'")';
+    var sql='insert into diamondcontents(diamondcontents.title,diamondcontents.contents) value("","")';
+    mysqls.query(sql,function(suc, rows,message){
+        if(suc){
+            var sql2='insert into diamonditem(diamonditem.diamondId,diamonditem.name,diamonditem.type,diamonditem.lock,diamonditem.password,diamonditem.contentId) values ("'+params.id+'","'+ params.name+'","'+params.type+'",'+params.lock+',"'+params.password+'",'+rows.insertId+')';
+            mysqls.query(sql2,function(suc2,rows2,message2){
+                if(suc2){
+                    res.json(rsp);
+                    return;
+                }
+                rsp.success=false;
+                rsp.message=message2;
+                res.json(rsp);
+            });
+        }
+    });
+
+});
+//新增方块内容
+app.post('/addboxdiamond',function(req,res){
+    const mysqls=require('../../base/mysql');
+    var rsp={
+        success:true,
+        data:[],
+        message:'新增成功'
+    };
+    var params=req.body;
+    var sql='insert into diamond(diamond.name) values ("'+ params.name+'")';
     mysqls.query(sql,function(suc, rows,message){
         if(suc){
             res.json(rsp);

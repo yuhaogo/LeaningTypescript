@@ -17,8 +17,15 @@ const diamondAdd=(param:any)=>{
         return data;
     });
 };
+//新增方块盒子
+const diamondBoxAdd=(param:any)=>{
+    return cFetch('/api/diamond/addboxdiamond',{method:'POST',body:JSON.stringify(param)}).then((data:any)=>{
+        return data;
+    });
+};
 export default {
     getDiamondBoxs:getDiamondBoxs,
     diamondVerify:diamondVerify,
-    diamondAdd:diamondAdd
+    diamondAdd:diamondAdd,
+    diamondBoxAdd:diamondBoxAdd
 };
