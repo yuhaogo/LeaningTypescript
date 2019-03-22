@@ -211,6 +211,7 @@ class Index extends React.Component<any,stateType>{
     //新增方块的盒子
     onAddDiamondBox=()=>{
         const {addDiamondBoxName}=this.state;
+        if(!addDiamondBoxName) return false;
         diamondBoxAdd({
             name:addDiamondBoxName
         }).then((data:any)=>{

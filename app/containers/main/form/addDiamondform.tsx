@@ -21,16 +21,20 @@ class AddDiamondForm extends React.Component<any,any>{
     }
     //新增小方块保存
     onAddSave=()=>{
-        const {getFieldsValue}=this.props.form;
+        const {validateFields}=this.props.form;
         const {onCallBack,values:defaultValues}=this.props;
-        const values=getFieldsValue();
-        values.lock=values.lock?1:0;
-        values.id=defaultValues.nowBoxId;
-        diamondAdd(values).then((data: any)=>{
-            const {success}=data;
-            if(success){
-                onCallBack();
-            }
+        let values:Object&{lock?:number,id?:string};
+        validateFields((err:any,value:any)=>{
+            if(err) return;
+            values=value;
+            values.lock=values.lock?1:0;
+            values.id=defaultValues.nowBoxId;
+            diamondAdd(values).then((data: any)=>{
+                const {success}=data;
+                if(success){
+                    onCallBack();
+                }
+            });
         });
     }
     render():JSX.Element{
