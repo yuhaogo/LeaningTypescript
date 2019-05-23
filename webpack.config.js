@@ -1,14 +1,9 @@
-const devConfig=require('./webpack.development');
-const proConfig=require('./webpack.production');
 const HtmlWebpackPlugin=require('html-webpack-plugin');
 const Path=require('path');
 const tsImportPluginFactory=require('ts-import-plugin');
 // const _config=process.env.NODE_ENV==='development'?devConfig:proConfig;
 let Config={
     mode:'production',
-    output: {
-        filename: 'app.[name].js'
-    },
     entry: {
         app:[
             './app/index.tsx'
@@ -16,13 +11,13 @@ let Config={
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template:'./app/index.html',
-            inject: false
+            template:'./app/index.html'
         }),
     ],
     output: {
-        filename: 'app.bundle.js',
+        filename: 'app.[hash:5].js',
         path: Path.join(__dirname,'./public'),
+        publicPath:'/'
     },
     resolve: {
         extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js']
@@ -61,7 +56,7 @@ let Config={
             },
             {
                 test:/\.(png|jpg|gif|jpeg|woff|woff2)$/,
-                use:['url-loader?limit=8192']
+                use:['url-loader?limit=8192'],
             }
         ]
     }

@@ -18,7 +18,7 @@ module.exports=Object.assign(webpackConfig,{
         publicPath:'/',
         contentBase:'./public',
         hot:true,
-        port:8001,
+        port:8003,
         open:true,
         inline:true,
         noInfo: true ,
@@ -35,7 +35,7 @@ module.exports=Object.assign(webpackConfig,{
                 changeOrigin:true
             },
             '/index/*':{
-                target:'http://127.0.0.1:8001',
+                target:'http://127.0.0.1:8003',
                 pathRewrite: {'/index/*' : ''}
             }
         }
