@@ -1,7 +1,5 @@
 import * as fetch from 'isomorphic-fetch';
-require('es6-promise').polyfill();
 import { Modal } from 'antd';
-import { promises } from 'fs';
 import {resetLockTime} from './lock';
 
 interface result {
@@ -9,7 +7,7 @@ interface result {
     ok:boolean,
     json:()=>void
 }
-// var api_host="http://127.0.0.1:8002";
+// var api_host="http://127.0.0.1:8002";`
 function checkOut504(res:result) {
     if(res.status===504){
         Modal.error({
