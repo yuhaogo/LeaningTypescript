@@ -1,6 +1,7 @@
 import * as fetch from 'isomorphic-fetch';
 import { Modal } from 'antd';
 import {resetLockTime} from './lock';
+import {getCookie} from "./common";
 
 interface result {
     status:number,
@@ -37,9 +38,11 @@ function dataJson(res:result) {
 }
 export const cFetch=(apiUrl:any,param:any)=>{
     const baseUrl=apiUrl;
+    const token=getCookie('token');
     param.headers={
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'sxyhome-access-token':token
     };
     resetLockTime();
     // param.credentials= 'include';

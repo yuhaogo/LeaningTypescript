@@ -10,20 +10,21 @@ import { Provider} from 'react-redux';
 import  thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import reducers from './reducers';
-import {Route,Switch,BrowserRouter} from 'react-router-dom';
+import {Route,Switch,Router} from 'react-router-dom';
 const store=createStore(reducers,applyMiddleware(thunk),applyMiddleware(logger));
-
+import {createHashHistory} from 'history';
+const hashHistory = createHashHistory();
 
 class App extends React.Component{
     public render():JSX.Element{
         return(
             <Provider store={store}>
-                <BrowserRouter>
+                <Router history={hashHistory}>
                     <Switch>
                         <Route exact path="/" component={Login} />
                         <Route path="/index" component={Main} />
                     </Switch>
-                </BrowserRouter>
+                </Router>
             </Provider>
         );
     }

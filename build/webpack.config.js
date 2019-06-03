@@ -1,26 +1,39 @@
 const HtmlWebpackPlugin=require('html-webpack-plugin');
-const Path=require('path');
+const Webpack=require('webpack');
+const path=require('path');
 const tsImportPluginFactory=require('ts-import-plugin');
-// const _config=process.env.NODE_ENV==='development'?devConfig:proConfig;
+const {buildPath,publicPath}=require('./projectConfig');
 let Config={
-    mode:'production',
     entry: {
         app:[
+            // '@babel/polyfill',
             './app/index.tsx'
         ]
     },
+    output: {
+        filename: 'assets/js/[name].[hash:5].js',
+        path: path.resolve(buildPath),
+        publicPath:publicPath+'/'
+    },
     plugins: [
         new HtmlWebpackPlugin({
-            template:'./app/index.html'
+            title:'ETMF',
+            template:path.resolve('./app/index.html'),
+            filename:'index.html'
+        }),
+        new Webpack.DefinePlugin({
+            'IS_DEV':process.env.build==='dev',
+            'IS_LOCAL':process.env.build==='local',
+            'IS_PROD':process.env.build==='prod',
+            'IS_TEST':process.env.build==='test'
+
         }),
     ],
-    output: {
-        filename: 'app.[hash:5].js',
-        path: Path.join(__dirname,'./public'),
-        publicPath:'/'
-    },
     resolve: {
-        extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js']
+        extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js'],
+        alias:{
+            utils:path.resolve(__dirname,'../app/util')
+        }
     },
     devtool: 'cheap-module-source-map',
     module: {
@@ -46,17 +59,17 @@ let Config={
                 }
             },
             {
-                test: /\.js$/,
+                test: /\.js|.jsx$/,
                 use: ['babel-loader'],
                 exclude: /node_modules/
             },
             {
-                test:/\.(css|less)$/,
-                use:['style-loader','css-loader','less-loader']
-            },
-            {
-                test:/\.(png|jpg|gif|jpeg|woff|woff2)$/,
-                use:['url-loader?limit=8192'],
+                test:/\.(png|jpg|gif|jpeg|woff|woff2|svg)$/,
+                loader:'url-loader',
+                options:{
+                    limit:8192,
+                    name:'assets/image/[name].[ext]'
+                }
             }
         ]
     }
