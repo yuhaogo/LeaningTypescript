@@ -1,12 +1,18 @@
 import * as fetch from 'isomorphic-fetch';
-import { Modal } from 'antd';
+import { Modal, message } from 'antd';
 import {resetLockTime} from './lock';
-import {getCookie} from "./common";
+import {getCookie} from './common';
 
 interface result {
     status:number,
     ok:boolean,
     json:()=>void
+}
+interface resultData{
+    status?:number,
+    success?:boolean,
+    data?:any,
+    message?:string
 }
 // var api_host="http://127.0.0.1:8002";`
 function checkOut504(res:result) {
@@ -36,6 +42,36 @@ function dataJson(res:result) {
         return res;
     }
 }
+//检查错误
+function checkOutError(res:any){
+    if(!res.success){
+        const {status=0,message}=res;
+        switch(status){
+        case 1006:
+            Modal.error({
+                title: '错误',
+                content: message,
+                onOk:()=>{
+                    window.location.href='/';
+                }
+            });
+            break;
+        default:
+            Modal.error({
+                title: '错误',
+                content:message,
+                onOk:()=>{
+                    window.location.href='/';
+                }
+            });
+            break;
+        }
+        throw message;
+    }else{
+        return res;
+    }
+    
+}
 export const cFetch=(apiUrl:any,param:any)=>{
     const baseUrl=apiUrl;
     const token=getCookie('token');
@@ -45,11 +81,10 @@ export const cFetch=(apiUrl:any,param:any)=>{
         'sxyhome-access-token':token
     };
     resetLockTime();
-    // param.credentials= 'include';
-    console.log(param);
-    //param.mode='no-cors';
     return fetch(baseUrl,param)
         .then(checkOut504)
         .then(checkOut401)
-        .then(dataJson);
+        .then(dataJson)
+        .then(checkOutError)
+        .catch((err)=>{throw err;});
 };

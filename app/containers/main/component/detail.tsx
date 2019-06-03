@@ -139,19 +139,19 @@ class Detail extends React.Component<any,stateType>{
                     spinning={spinning}
                     tip="保存中...">
                     {isEdit?
-                                <>
-                                <div className="content-title">
-                                    <h3><Icon type="flag" />副标题</h3>
-                                    <Input placeholder="副标题不超过255字符" value={contentsTitle} maxLength={255} style={{width:'70%'}} onChange={this.inputChange}/>
-                                </div>
-                                <div className="editor-body">
-                                    <h3><Icon type="profile" />内容</h3>
-                                    <BraftEditor value={editorState} onChange={this.handleChange} style={{border:'1px solid rgba(0, 0, 0, 0.2)'}}/>
-                                </div>
-                                <div className="detail-btns">
-                                    <Button type="primary" onClick={this.onSaveEditContents}>保存</Button>
-                                </div>
-                                </>:
+                        <>
+                            <div className="content-title">
+                                <h3><Icon type="flag" />副标题</h3>
+                                <Input placeholder="副标题不超过255字符" value={contentsTitle} maxLength={255} style={{width:'70%'}} onChange={this.inputChange}/>
+                            </div>
+                            <div className="editor-body">
+                                <h3><Icon type="profile" />内容</h3>
+                                <BraftEditor value={editorState} onChange={this.handleChange} style={{border:'1px solid rgba(0, 0, 0, 0.2)'}}/>
+                            </div>
+                            <div className="detail-btns">
+                                <Button type="primary" onClick={this.onSaveEditContents}>保存</Button>
+                            </div>
+                        </>:
                         <div className="detail-html">
                             <h3>{contentsTitle}</h3>
                             <div dangerouslySetInnerHTML={{__html:contents}}></div>

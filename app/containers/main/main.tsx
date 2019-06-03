@@ -51,7 +51,7 @@ class Index extends React.Component<any,stateType>{
             nowDiamondItem:{}
         };
     }
-    componentDidMount(){
+    async componentDidMount(){
         autoLock((isLock:boolean)=>{
             if(isLock){
                 this.setState({
@@ -59,15 +59,14 @@ class Index extends React.Component<any,stateType>{
                 });
             }
         });
-        this.getDiamondBox();
+        await this.getDiamondBox();
     }
     //获取方块集合
-    getDiamondBox=()=>{
-        getDiamondBoxs().then((res:any)=>{
-            const{data}=res;
-            this.setState({
-                customDias:data
-            });
+    getDiamondBox=async ()=>{
+        const res= await getDiamondBoxs();
+        const{data}=res;
+        this.setState({
+            customDias:data
         });
     }
     //获取大模块
