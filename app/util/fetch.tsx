@@ -59,10 +59,7 @@ function checkOutError(res:any){
         default:
             Modal.error({
                 title: '错误',
-                content:message,
-                onOk:()=>{
-                    window.location.href='/';
-                }
+                content:message
             });
             break;
         }
