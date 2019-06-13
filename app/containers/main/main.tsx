@@ -10,7 +10,7 @@ import Scroll from '../../component/scroll/scroll';
 import Detail from './component/detail';
 import Drag from '../../component/drag/drag';
 import CountDown from '../../component/countdown/countdown';
-
+import {clearCookies} from '../../util/common';
 import {autoLock,resetLockTime} from '../../util/lock';
 import AddDiamondForm from './form/addDiamondform';
 const {DragItem}=Drag;
@@ -187,7 +187,7 @@ class Index extends React.Component<any,stateType>{
     onDiamondItemEdit=(nowItem:any)=>{
         this.setState({
             addModalVisible:true,
-            nowDiamondItem:nowItem
+            nowDiamondItem:nowItem,
         });
     }
     //删除小方块
@@ -227,8 +227,23 @@ class Index extends React.Component<any,stateType>{
             addDiamondBoxName:value
         });
     }
+    //退出
+    onLayout=()=>{
+        clearCookies();
+        window.location.href='/';
+    }
     render():JSX.Element{
-        const {detail,editStatus,addModalVisible,modal1Visible,diamondVerify,diamondMessage,diamondPassword,isLock,nowDiamondItem,addDiamondBoxName}=this.state;
+        const {
+            detail,
+            editStatus,
+            addModalVisible,
+            modal1Visible,
+            diamondVerify,
+            diamondMessage,
+            diamondPassword,
+            isLock,
+            nowDiamondItem,
+            addDiamondBoxName}=this.state;
         const customDias=this.customDiamonds();
         return(
             <div className="main">
@@ -236,7 +251,10 @@ class Index extends React.Component<any,stateType>{
                     <Content className="main-content">
                         <div className={'content-body' + (detail?' detail':'')}>
                             <div className="fl">
-                                {detail?<Detail onBackClick={this.onBack} {...this.diamondData} />:null}
+                                {detail?<Detail 
+                                    onBackClick={this.onBack} 
+                                    {...this.diamondData}
+                                />:null}
                                 <CountDown hour={20} minute={0} second={0} />
                             </div>
                             <div className="fl">
@@ -266,7 +284,7 @@ class Index extends React.Component<any,stateType>{
                             <div className={'action-btn'+(editStatus?' active':'')} onClick={this.onTransitionEditStatus} >
                                 <Icon type="form"/>
                             </div>
-                            <div className="action-btn" >
+                            <div className="action-btn" onClick={this.onLayout} >
                                 <Icon type="logout"/>
                             </div>
                         </Sider>}

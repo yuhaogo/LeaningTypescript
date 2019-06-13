@@ -1,15 +1,19 @@
 import * as React from 'react';
-import { Form,Input,Select,Checkbox,Modal} from 'antd';
+import { Form,Input,Select,Checkbox,Modal, Upload,Icon} from 'antd';
 const {Item:FormItem}=Form;
 const {Option}=Select;
-
+const {Dragger}=Upload;
 import actions from '../action';
+import { getCookie } from '../../../util/common';
 const {diamondAdd}=actions;
 class AddDiamondForm extends React.Component<any,any>{
     constructor(props:any){
         super(props);
         this.state={
-            isPassword:false
+            //是否加密
+            isPassword:false,
+            //文本类型
+            textType:null
         };
     }
     //是否加密
@@ -37,6 +41,12 @@ class AddDiamondForm extends React.Component<any,any>{
             });
         });
     }
+    //文本类型更改
+    changeTextType=(value:string)=>{
+        this.setState({
+            textType:value
+        });
+    }
     render():JSX.Element{
         const formItemLayout = {
             labelCol: {
@@ -50,7 +60,8 @@ class AddDiamondForm extends React.Component<any,any>{
         };
         const {getFieldDecorator}=this.props.form;
         let {values,visible,title,onCancel}=this.props;
-        const {isPassword}=this.state;
+        const {isPassword,textType}=this.state;
+        const token=getCookie('token');
         return(
             <Modal 
                 title={title}
@@ -85,8 +96,9 @@ class AddDiamondForm extends React.Component<any,any>{
                                 required: true, message: '请选择方块类型',
                             }],
                         })(
-                            <Select>
+                            <Select onChange={this.changeTextType}>
                                 <Option value="1">文本</Option>
+                                <Option value="2">MarkDown文本</Option>
                             </Select>
                         )}
                     </FormItem>
@@ -114,6 +126,35 @@ class AddDiamondForm extends React.Component<any,any>{
                             }],
                         })(
                             <Input type="password" />
+                        )}
+                    </FormItem>:null}
+                    {textType==2?<FormItem
+                        label="上传md文件"
+                    >
+                        {getFieldDecorator('fileId', {
+                            rules: [{
+                                required: true, message: '请选择文件'
+                            }],
+                        })(
+                            <Dragger
+                                name="file"
+                                action="/api/upload/md"
+                                accept=".md"
+                                headers={{
+                                    'sxyhome-access-token':token
+                                }}
+                                onChange={()=>{
+
+                                }}
+                            >
+                                <p className="ant-upload-drag-icon">
+                                    <Icon type="inbox" />
+                                </p>
+                                <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                                <p className="ant-upload-hint">Support for a single or bulk upload. Strictly prohibit from uploading company data or other 
+                                band files
+                                </p>
+                            </Dragger>
                         )}
                     </FormItem>:null}
                 </Form>

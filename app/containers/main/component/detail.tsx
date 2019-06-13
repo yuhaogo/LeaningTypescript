@@ -2,6 +2,7 @@ import './detail.less';
 import * as React from 'react';
 import {Icon,Input,Button,Spin} from 'antd';
 import BraftEditor from 'braft-editor';
+import * as ReactMarkdown from 'react-markdown';
 import action from './action';
 const {getDiamondContents,saveDiamondContents,saveDaimondTitle}=action;
 interface stateType{
@@ -36,7 +37,7 @@ class Detail extends React.Component<any,stateType>{
             getDiamondContents({
                 id:contentId
             }).then(res=>{
-                const {data,success,message}=res;
+                const {data}=res;
                 this.setState({
                     contentsTitle:data.title,
                     contents:data.contents,
@@ -119,16 +120,16 @@ class Detail extends React.Component<any,stateType>{
     }
     render():JSX.Element{
         const {isEdit,spinning,contentsTitle,editorState,contents,isEditTitle,diamondTitle}=this.state;
-        const {name}=this.props;
+        const {name,type}=this.props;
         let _diamondTitle=diamondTitle?diamondTitle:name;
         return(<div className="diamond-detail">
             <div className="top-bar">
                 <div className="diamond-title">
                     {!isEditTitle?
                         <p onClick={this.setDiamondTitle}>{_diamondTitle}</p>:
-                            <>
-                                <Input defaultValue={_diamondTitle} onBlur={this.saveDiamondTitle}/>
-                            </>
+                        <>
+                            <Input defaultValue={_diamondTitle} onBlur={this.saveDiamondTitle}/>
+                        </>
                     }
                 </div>
                 <Icon type="edit" onClick={this.onEdit} className={isEdit?'active':''}/>
@@ -139,6 +140,7 @@ class Detail extends React.Component<any,stateType>{
                     spinning={spinning}
                     tip="保存中...">
                     {isEdit?
+                        
                         <>
                             <div className="content-title">
                                 <h3><Icon type="flag" />副标题</h3>
@@ -146,7 +148,9 @@ class Detail extends React.Component<any,stateType>{
                             </div>
                             <div className="editor-body">
                                 <h3><Icon type="profile" />内容</h3>
-                                <BraftEditor value={editorState} onChange={this.handleChange} style={{border:'1px solid rgba(0, 0, 0, 0.2)'}}/>
+                                {type==1?
+                                    <BraftEditor value={editorState} onChange={this.handleChange} style={{border:'1px solid rgba(0, 0, 0, 0.2)'}}/>:
+                                    <ReactMarkdown />}
                             </div>
                             <div className="detail-btns">
                                 <Button type="primary" onClick={this.onSaveEditContents}>保存</Button>

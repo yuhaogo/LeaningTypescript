@@ -14,12 +14,12 @@ export const getCookie = (name:string) => {
     else
         return null;
 };
-// //清空cookies
-// export const clearCookies = () => {
-//     var exp = new Date();
-//     exp.setTime(exp.getTime() + (-1 * 60 * 1000));
-//     document.cookie ='token=;expires=' +';domain=localhost;path=/;expires=' +  exp.toGMTString()  + ';';
-// };
+//清空cookies
+export const clearCookies = () => {
+    var exp = new Date();
+    exp.setTime(exp.getTime() + (-1 * 60 * 1000));
+    document.cookie ='token=;expires=' +';domain=localhost;path=/;expires=' +  exp.toUTCString()  + ';';
+};
 // //写sessionStorage
 // export const setSessionStorage=(name, value)=>{
 //     window.sessionStorage.setItem(name,JSON.stringify(value));
